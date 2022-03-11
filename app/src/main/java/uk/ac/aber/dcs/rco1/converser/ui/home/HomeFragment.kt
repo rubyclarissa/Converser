@@ -186,19 +186,11 @@ class HomeFragment : Fragment(){
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(spinner == sourceSpinner) {
-                    sourceLanguageCode = when (spinner.selectedItem.toString()) {
-                        "English" -> TranslateLanguage.ENGLISH
-                        "Spanish" -> TranslateLanguage.SPANISH
-                        "French" -> TranslateLanguage.FRENCH
-                        else -> TranslateLanguage.ENGLISH
-                    }
+                    sourceLanguageCode = setLanguageCode(sourceSpinner)
+                   // setLanguageCode(sourceLanguageCode, sourceSpinner)
                 } else if (spinner == targetSpinner){
-                    targetLanguageCode = when (spinner.selectedItem.toString()) {
-                        "English" -> TranslateLanguage.ENGLISH
-                        "Spanish" -> TranslateLanguage.SPANISH
-                        "French" -> TranslateLanguage.FRENCH
-                        else -> TranslateLanguage.ENGLISH
-                    }
+                    targetLanguageCode = setLanguageCode(targetSpinner)
+                   // setLanguageCode(targetLanguageCode, targetSpinner)
                 }
             }
 
@@ -206,6 +198,74 @@ class HomeFragment : Fragment(){
             }
 
         }
+    }
+
+    private fun setLanguageCode(spinner: Spinner): String{
+        //val languageCode: String =
+        return when (spinner.selectedItem.toString()){
+            "Afrikaans" -> TranslateLanguage.AFRIKAANS
+            "Arabic" -> TranslateLanguage.ARABIC
+            "Belarusian" -> TranslateLanguage.BELARUSIAN
+            "Bulgarian" -> TranslateLanguage.BULGARIAN
+            "Bengali" -> TranslateLanguage.BENGALI
+            "Catalan" -> TranslateLanguage.CATALAN
+            "Czech" -> TranslateLanguage.CZECH
+            "Welsh" -> TranslateLanguage.WELSH
+            "Danish" -> TranslateLanguage.DANISH
+            "German" -> TranslateLanguage.GERMAN
+            "Greek" -> TranslateLanguage.GREEK
+            "English" -> TranslateLanguage.ENGLISH
+            "Esperanto" -> TranslateLanguage.ESPERANTO
+            "Spanish" -> TranslateLanguage.SPANISH
+            "Estonian" -> TranslateLanguage.ESTONIAN
+            "Persian" -> TranslateLanguage.PERSIAN
+            "Finnish" -> TranslateLanguage.FINNISH
+            "French" -> TranslateLanguage.FRENCH
+            "Irish" -> TranslateLanguage.IRISH
+            "Galician" -> TranslateLanguage.GALICIAN
+            "Gujarati" -> TranslateLanguage.GUJARATI
+            "Hebrew" -> TranslateLanguage.HEBREW
+            "Hindi" -> TranslateLanguage.HINDI
+            "Croatian" -> TranslateLanguage.CROATIAN
+            "Haitian" -> TranslateLanguage.HAITIAN_CREOLE
+            "Hungarian" -> TranslateLanguage.HUNGARIAN
+            "Indonesian" -> TranslateLanguage.INDONESIAN
+            "Icelandic" -> TranslateLanguage.ICELANDIC
+            "Italian" -> TranslateLanguage.ITALIAN
+            "Japanese" -> TranslateLanguage.JAPANESE
+            "Georgian" -> TranslateLanguage.GEORGIAN
+            "Kannada" -> TranslateLanguage.KANNADA
+            "Korean" -> TranslateLanguage.KOREAN
+            "Lithuanian" -> TranslateLanguage.LITHUANIAN
+            "Latvian" -> TranslateLanguage.LATVIAN
+            "Macedonian" -> TranslateLanguage.MACEDONIAN
+            "Marathi" -> TranslateLanguage.MARATHI
+            "Malay" -> TranslateLanguage.MALAY
+            "Maltese" -> TranslateLanguage.MALTESE
+            "Dutch" -> TranslateLanguage.DUTCH
+            "Norwegian" -> TranslateLanguage.NORWEGIAN
+            "Polish" -> TranslateLanguage.POLISH
+            "Portuguese" -> TranslateLanguage.PORTUGUESE
+            "Romanian" -> TranslateLanguage.ROMANIAN
+            "Russian" -> TranslateLanguage.RUSSIAN
+            "Slovak" -> TranslateLanguage.SLOVAK
+            "Slovenian" -> TranslateLanguage.SLOVENIAN
+            "Albanian" -> TranslateLanguage.ALBANIAN
+            "Swedish" -> TranslateLanguage.SWEDISH
+            "Swahili" -> TranslateLanguage.SWAHILI
+            "Tamil" -> TranslateLanguage.TAMIL
+            "Telugu" -> TranslateLanguage.TELUGU
+            "Thai" -> TranslateLanguage.THAI
+            "Tagalog" -> TranslateLanguage.TAGALOG
+            "Turkish" -> TranslateLanguage.TURKISH
+            "Ukrainian" -> TranslateLanguage.UKRAINIAN
+            "Urdu" -> TranslateLanguage.URDU
+            "Vietnamese" -> TranslateLanguage.VIETNAMESE
+            "Chinese" -> TranslateLanguage.CHINESE
+            //default to english
+            else -> TranslateLanguage.ENGLISH
+        }
+       // return languageCode
     }
 
     private fun speak(view: View) {
