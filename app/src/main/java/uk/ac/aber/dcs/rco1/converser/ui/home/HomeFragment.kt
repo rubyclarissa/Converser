@@ -82,19 +82,26 @@ class HomeFragment : Fragment(){
 
 
 
-
-
         //get language selected in the spinners
         sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
         targetLanguage = targetSpinner.selectedItem.toString().uppercase()
 
         stringToTranslate = inputText.text.toString()
 
+        swapButton.setOnClickListener{
+            //swap text in spinners
+            //get source language and put in temp target
+            val tempTargetLanguage = sourceSpinner.selectedItemPosition
+            //get target language and put in source
+            sourceSpinner.setSelection(targetSpinner.selectedItemPosition)
+            //put temp target in target
+            targetSpinner.setSelection(tempTargetLanguage)
+        }
 
         translateButton.setOnClickListener{
             //create translator object with configurations for source and target languages
             val options = TranslatorOptions.Builder()
-                .setSourceLanguage(sourceLanguageCode) //sourcelanguage ?
+                .setSourceLanguage(sourceLanguageCode)
                 .setTargetLanguage(targetLanguageCode)
                 .build()
 
@@ -137,7 +144,6 @@ class HomeFragment : Fragment(){
         micFAB.setOnClickListener{
             speak(homeFragmentBinding.recordVoice)
         }
-
 
         return homeFragmentBinding.root
     }
