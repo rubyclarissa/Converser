@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Converser</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragmentHome">Home fragment</string>
+    <string name="enter_text">Enter text to translate</string>
+
+    <string-array name="sourceLanguages">
+        <item>From</item>
+        <item>English</item>
+        <item>French</item>
+        <item>Spanish</item>
+    </string-array>
+
+    <string-array name="targetLanguages">
+        <item>To</item>
+        <item>English</item>
+        <item>French</item>
+        <item>Spanish</item>
+    </string-array>
+
+    <string-array name="languageCodes">
+        <item>en</item>
+        <item>fr</item>
+        <item>es</item>
+    </string-array>
+
+</resources>
