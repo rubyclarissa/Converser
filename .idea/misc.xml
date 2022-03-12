@@ -3,12 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/background_first_language.xml" value="0.165" />
+        <entry key="app/src/main/res/drawable/background_second_language.xml" value="0.1824074074074074" />
+        <entry key="app/src/main/res/drawable/conversation_background.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/drawable/language_selection_background.xml" value="0.23541666666666666" />
         <entry key="app/src/main/res/drawable/section_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/translate_button_background.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/language_spinner.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/layout/translated_message_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/translated_message_item_first_language.xml" value="0.22035573122529645" />
+        <entry key="app/src/main/res/layout/translated_message_item_second_language.xml" value="0.1" />
       </map>
     </option>
   </component>
