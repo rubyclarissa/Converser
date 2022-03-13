@@ -61,7 +61,7 @@
 
     <!-- Text input area with button to translate -->
 
-    <View
+    <!--<View
         android:id="@+id/conversation_background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -73,16 +73,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/languageSelection"
         app:layout_constraintBottom_toTopOf="@id/recordVoice"/>
-
+-->
     <ScrollView
+        android:id="@+id/conversation_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/conversation_background"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/conversation_background"
+        android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/conversation_background"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/languageSelection"
+        app:layout_constraintBottom_toTopOf="@id/recordVoice"
+        android:scrollbars="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/conversationRecyclerView"
@@ -97,6 +101,7 @@
             app:layout_constraintTop_toTopOf="@+id/conversation_background"
             app:layout_constraintVertical_bias="0.0"
             android:scrollbars="vertical"/>
+
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
