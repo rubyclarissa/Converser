@@ -97,9 +97,6 @@ class HomeFragment : Fragment(){
         messageRecyclerView.layoutManager = conversationLayoutManager
 
 
-        //get language selected in the spinners
-        sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
-        targetLanguage = targetSpinner.selectedItem.toString().uppercase()
 
         stringToTranslate = inputText.text.toString()
 
@@ -111,6 +108,9 @@ class HomeFragment : Fragment(){
             sourceSpinner.setSelection(targetSpinner.selectedItemPosition)
             //put temp target in target
             targetSpinner.setSelection(tempTargetLanguage)
+
+            sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
+            targetLanguage = targetSpinner.selectedItem.toString().uppercase()
         }
 
         translateButton.setOnClickListener{
@@ -159,14 +159,11 @@ class HomeFragment : Fragment(){
                                 languageA = sourceLanguage
                                 language = 'A'
                             }
-                            conversationAdapter.itemCount > 0 && sourceLanguage != languageA -> {
+                            (conversationAdapter.itemCount > 0) && (sourceLanguage != languageA) -> {
                                 language = 'B'
-                            }
-                            conversationAdapter.itemCount > 0 && sourceLanguage == languageA -> {
-                                language = 'A'
                             }
                             else -> {
-                                language = 'B'
+                                language = 'A'
                             }
                         }
 
@@ -243,10 +240,13 @@ class HomeFragment : Fragment(){
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(spinner == sourceSpinner) {
+                    //get language selected in the spinners
+                    sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
                     sourceLanguageCode = setLanguageCode(sourceSpinner)
                    // setLanguageCode(sourceLanguageCode, sourceSpinner)
                 } else if (spinner == targetSpinner){
                     targetLanguageCode = setLanguageCode(targetSpinner)
+                    targetLanguage = targetSpinner.selectedItem.toString().uppercase()
                    // setLanguageCode(targetLanguageCode, targetSpinner)
                 }
             }
