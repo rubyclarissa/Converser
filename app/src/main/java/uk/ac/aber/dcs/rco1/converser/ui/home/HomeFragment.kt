@@ -73,6 +73,9 @@ class HomeFragment : Fragment(){
         //get the UI elements via the binding mechanism
         getUIElements()
 
+        //auto scroll to bottom of conversation scrolable area
+        val scrollView =  homeFragmentBinding.conversationBackground
+
         //get speech data and put into the edit text box
         activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -171,6 +174,10 @@ class HomeFragment : Fragment(){
                         val messageObject = Message(originalMessage, translatedText, language)
                         messageList.add(messageObject)
                         conversationAdapter.notifyDataSetChanged()
+
+                        scrollView.post {
+                            scrollView.fullScroll(View.FOCUS_DOWN)
+                        }
                     }
 
                     .addOnFailureListener {
