@@ -82,11 +82,11 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/conversation_background"
         android:padding="4dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@id/recordVoice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/languageSelection"
-        app:layout_constraintBottom_toTopOf="@id/recordVoice"
-        android:scrollbars="vertical">
+        app:layout_constraintTop_toBottomOf="@+id/languageSelection">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/conversationRecyclerView"
@@ -94,20 +94,20 @@
             android:layout_height="0dp"
             android:layout_margin="4dp"
             android:orientation="vertical"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/conversation_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/conversation_background"
-            app:layout_constraintVertical_bias="0.0"
-            android:scrollbars="vertical"/>
+            app:layout_constraintVertical_bias="0.0" />
 
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/recordVoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/purple_200"
         android:clickable="true"

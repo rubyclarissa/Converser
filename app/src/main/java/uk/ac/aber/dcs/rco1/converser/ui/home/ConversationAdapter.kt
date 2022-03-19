@@ -8,6 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.aber.dcs.rco1.converser.R
 
+/**
+ * TODO
+ *
+ * @property context
+ * @property messageList
+ */
 class ConversationAdapter(
     val context: Context,
     val messageList: ArrayList<Message>,
@@ -17,16 +23,38 @@ class ConversationAdapter(
     private val A = 1
     private val B = 2
 
+    /**
+     * TODO
+     *
+     * @constructor
+     * TODO
+     *
+     * @param itemView
+     */
     inner class LanguageAViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val originalMessageA: TextView = itemView.findViewById<TextView>(R.id.languageAOriginalMessage)
         val translatedMessageA: TextView = itemView.findViewById<TextView>(R.id.languageATranslatedMessage)
     }
 
+    /**
+     * TODO
+     *
+     * @constructor
+     * TODO
+     *
+     * @param itemView
+     */
     inner class LanguageBViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val originalMessageB = itemView.findViewById<TextView>(R.id.languageBOriginalMessage)
         val translatedlMessageB = itemView.findViewById<TextView>(R.id.languageBTranslatedMessage)
     }
 
+    /**
+     * TODO
+     *
+     * @param position
+     * @return
+     */
     override fun getItemViewType(position: Int): Int {
         val currentMessage = messageList[position]
 
@@ -37,6 +65,13 @@ class ConversationAdapter(
         }
     }
 
+    /**
+     * TODO
+     *
+     * @param parent
+     * @param viewType
+     * @return
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         //if language A message
         if (viewType == 1){
@@ -56,6 +91,12 @@ class ConversationAdapter(
         }
     }
 
+    /**
+     * TODO
+     *
+     * @param holder
+     * @param position
+     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val currentMessage = messageList[position]
@@ -75,6 +116,11 @@ class ConversationAdapter(
         }
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
     override fun getItemCount(): Int {
        return messageList.size
     }

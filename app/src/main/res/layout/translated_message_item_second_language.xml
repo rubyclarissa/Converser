@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:padding="4dp"
         android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:paddingEnd="16dp"
         android:background="@drawable/background_second_language"
         android:orientation="vertical">
 
@@ -23,6 +23,7 @@
             android:minWidth="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/dark_grey"
+            android:textAlignment="viewEnd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,6 +43,7 @@
             android:minWidth="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            android:textAlignment="viewEnd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/languageBOriginalMessage" />
 

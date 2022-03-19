@@ -25,40 +25,54 @@ import uk.ac.aber.dcs.rco1.converser.databinding.FragmentHomeBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * TODO
+ *
+ */
 class HomeFragment : Fragment(){
 
     private lateinit var homeFragmentBinding: FragmentHomeBinding
 
-    //startActivityForResult is deprecated so need to use this instead
+    //used instead of the depreciated startActivityForResult in speak method
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
-    //UI elements
+    //grab UI elements
     private lateinit var translateButton: ImageButton
     private lateinit var micFAB: ImageButton
     private lateinit var swapButton: ImageButton
-   // private lateinit var originalTextView: TextView
-   // private lateinit var translatedTextView: TextView
     private lateinit var messageRecyclerView: RecyclerView
     private lateinit var inputText: EditText
     private lateinit var sourceSpinner: Spinner
     private lateinit var targetSpinner: Spinner
 
+    //adapter for the conversation recycler view
     private lateinit var conversationAdapter: ConversationAdapter
+    //list of translations in a conversation
     private lateinit var messageList : ArrayList<Message>
 
     private var sourceLanguage: String = ""
     private var targetLanguage: String = ""
     private var stringToTranslate: String = ""
 
+    //initialise language codes to English by default
     var sourceLanguageCode = TranslateLanguage.ENGLISH
     var targetLanguageCode = TranslateLanguage.ENGLISH
 
     private lateinit var translator: Translator
 
+    //used for identifying which language is being translated
     private var language: Char = 'B'
     private lateinit var languageA: String
+    private lateinit var languageB: String
 
+    /**
+     * TODO
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,22 +87,8 @@ class HomeFragment : Fragment(){
         //get the UI elements via the binding mechanism
         getUIElements()
 
-        //auto scroll to bottom of conversation scrolable area
-        val scrollView =  homeFragmentBinding.conversationBackground
-
         //get speech data and put into the edit text box
-        activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult? ->
-            //if data is available, display data in edit text view
-            if (result!!.resultCode == Activity.RESULT_OK && result.data != null) {
-                val speechData =
-                    result.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                            //TODO THIS IS BAD AND DISGUSTING - MUST CHANGE OR CHECK
-                            as ArrayList<Editable>
-                inputText.text = speechData[0]
-            }
-        }
+        displaySpeechToText()
 
         //find and configure conversation recycler view
         messageList = ArrayList()
@@ -99,11 +99,117 @@ class HomeFragment : Fragment(){
         //conversationLayoutManager.orientation = LinearLayoutManager.VERTICAL
         messageRecyclerView.layoutManager = conversationLayoutManager
 
-
-
         stringToTranslate = inputText.text.toString()
 
-        swapButton.setOnClickListener{
+        //set up on click events
+        setListenerForLanguageSwap()
+        setListenerForTranslation()
+        setListenerForSpeechRecording()
+
+
+        return homeFragmentBinding.root
+    }
+
+    private fun setListenerForSpeechRecording() {
+        micFAB.setOnClickListener {
+            speak(homeFragmentBinding.recordVoice)
+        }
+    }
+
+    private fun setListenerForTranslation() {
+        translateButton.setOnClickListener {
+            //create translator object with configurations for source and target languages
+            val options = TranslatorOptions.Builder()
+                .setSourceLanguage(sourceLanguageCode)
+                .setTargetLanguage(targetLanguageCode)
+                .build()
+
+            //create a translator object with the target and source languages set
+            translator = Translation.getClient(options)
+            lifecycle.addObserver(translator)
+
+            //set up conditions for downloading language models
+            val conditions = DownloadConditions.Builder()
+                .requireWifi()
+                .build()
+
+            Toast.makeText(activity, "... translating...", Toast.LENGTH_SHORT).show()
+
+            //if text input is not empty
+            if (!isEmpty(inputText.text)) {
+
+                //download the language models if they are not already downloaded
+                translator.downloadModelIfNeeded(conditions)
+                    .addOnSuccessListener {
+                        Log.i("TAG", "Downloaded model successfully")
+                        Toast.makeText(
+                            activity,
+                            "DEBUG: Downloaded model successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener {
+                        Log.e("TAG", "Model could not be downloaded")
+                        /*Toast.makeText(
+                            activity,
+                            "DEBUG: Model could not be downloaded",
+                            Toast.LENGTH_SHORT
+                        ).show()*/
+                    }
+
+                //translate the input text using the translator model that was just created
+                translator.translate(homeFragmentBinding.textBox.text.toString())
+                    .addOnSuccessListener { translatedText ->
+                        Log.i("TAG", "Translation is " + translatedText as String)
+
+                        //check if language A (first message translated) or B
+                        when {
+                            conversationAdapter.itemCount == 0 -> {
+                                languageA = sourceLanguage
+                                languageB = targetLanguage
+                                language = 'A'
+                            }
+                            (conversationAdapter.itemCount > 0) && (sourceLanguage == languageA)
+                                    && (targetLanguage == languageB) -> language = 'A'
+                            (conversationAdapter.itemCount > 0) && (sourceLanguage == languageB)
+                                    && (targetLanguage == languageA) -> language = 'B'
+                            else -> {
+                                //set new language
+                                languageA = sourceLanguage
+                                languageB = targetLanguage
+                                language = 'A'
+                                restartConversation()
+                            }
+                        }
+
+                        //add a message to the message list (original and translated)
+                        val originalMessage = inputText.text.toString()
+                        val messageObject = Message(originalMessage, translatedText, language)
+                        messageList.add(messageObject)
+
+                        //tell the adapter that a message has been added, so it can update the UI
+                        //TODO: use different mechanism to notify change
+                        conversationAdapter.notifyDataSetChanged()
+
+                    }
+                    .addOnFailureListener {
+                        Log.e("TAG", "Translation failed")
+                    }
+
+            }
+            // no input text to translate
+            else {
+                Toast.makeText(activity, "No text to translate", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * Sets a listener when the swap button is pressed
+     * Swaps the source and target languages around
+     */
+    private fun setListenerForLanguageSwap() {
+        swapButton.setOnClickListener {
             //swap text in spinners
             //get source language and put in temp target
             val tempTargetLanguage = sourceSpinner.selectedItemPosition
@@ -115,95 +221,32 @@ class HomeFragment : Fragment(){
             sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
             targetLanguage = targetSpinner.selectedItem.toString().uppercase()
         }
-
-        translateButton.setOnClickListener{
-            //create translator object with configurations for source and target languages
-            val options = TranslatorOptions.Builder()
-                .setSourceLanguage(sourceLanguageCode)
-                .setTargetLanguage(targetLanguageCode)
-                .build()
-
-            translator = Translation.getClient(options)
-           // lifecycle.addObserver(translator)
-
-            val conditions = DownloadConditions.Builder()
-                .requireWifi()
-                .build()
-
-            //TODO edit to use recycler view
-           // translatedTextView.text = "... translating ..."
-            Toast.makeText(activity, "... translating...", Toast.LENGTH_SHORT).show()
-
-            if (!isEmpty(inputText.text)){
-
-                //val message: Message? = null
-                //message!!.originalMessage = inputText.text.toString()
-
-                translator.downloadModelIfNeeded(conditions)
-                    .addOnSuccessListener {
-                        Log.i("TAG", "Downloaded model successfully")
-                        Toast.makeText(activity, "DEBUG: Downloaded model successfully", Toast.LENGTH_SHORT).show()
-                    }
-
-                    .addOnFailureListener {
-                        Log.e("TAG", "Model could not be downloaded")
-                        Toast.makeText(activity, "DEBUG: Model could not be downloaded", Toast.LENGTH_SHORT).show()
-                    }
-
-                    translator.translate(homeFragmentBinding.textBox.text.toString())
-                    .addOnSuccessListener { translatedText ->
-                        //TODO edit to use recycler view
-                       // translatedTextView.text = translatedText
-                        Log.i("TAG", "Translation is " + translatedText as String)
-
-                        //check if first item / if language a or b
-                        when {
-                            conversationAdapter.itemCount == 0 -> {
-                                languageA = sourceLanguage
-                                language = 'A'
-                            }
-                            (conversationAdapter.itemCount > 0) && (sourceLanguage != languageA) -> {
-                                language = 'B'
-                            }
-                            else -> {
-                                language = 'A'
-                            }
-                        }
-
-                        val originalMessage = inputText.text.toString()
-                        val messageObject = Message(originalMessage, translatedText, language)
-                        messageList.add(messageObject)
-                        conversationAdapter.notifyDataSetChanged()
-
-                        scrollView.post {
-                            scrollView.fullScroll(View.FOCUS_DOWN)
-                        }
-                    }
-
-                    .addOnFailureListener {
-                        Log.e("TAG", "Translation failed")
-                    }
-
-            } else{
-                //TODO edit to use recycler view
-                //translatedTextView.text = "no text to translate"
-                Toast.makeText(activity, "No text to translate", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        micFAB.setOnClickListener{
-            speak(homeFragmentBinding.recordVoice)
-        }
-
-
-        return homeFragmentBinding.root
     }
 
+    /**
+     * Uses Intent mechanism to update the input text field with speech data when it is provided
+     *
+     */
+    private fun displaySpeechToText() {
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult? ->
+            //if data is available, display data in edit text view
+            if (result!!.resultCode == Activity.RESULT_OK && result.data != null) {
+                val speechData =
+                    result.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                            //TODO: check the cast or use alternative mechanism
+                            as ArrayList<Editable>
+                inputText.text = speechData[0]
+            }
+        }
+    }
+
+    /**
+     * Initialise the UI elements using the binding mechanism
+     *
+     */
     private fun getUIElements() {
-        //TODO edit to use recycler view
-       // originalTextView = homeFragmentBinding
-        //TODO edit to use recycler view
-       // translatedTextView = homeFragmentBinding.
         messageRecyclerView = homeFragmentBinding.conversationRecyclerView
         inputText = homeFragmentBinding.textBox
         translateButton = homeFragmentBinding.translateButton
@@ -213,7 +256,10 @@ class HomeFragment : Fragment(){
         swapButton = homeFragmentBinding.swapLanguages
     }
 
-
+    /**
+     * Set up the source and target language spinners using appropriate resources
+     *
+     */
     private fun setupSpinners(){
         setupSpinner(view,
             homeFragmentBinding.sourceLanguageSpinner,
@@ -224,6 +270,13 @@ class HomeFragment : Fragment(){
             R.array.targetLanguages)
     }
 
+    /**
+     * Set up an individual spinner to provide a selection of languages
+     *
+     * @param view - the current view
+     * @param spinner - The spinner being set up (source or target language lists)
+     * @param arrayResourceId - The array of languages stored as a strings array value
+     */
     private fun setupSpinner(view: View?, spinner: Spinner, arrayResourceId: Int){
         //default value first item in string array
         spinner.setSelection(1)
@@ -243,29 +296,32 @@ class HomeFragment : Fragment(){
         //assign adapter to spinner
         spinner.adapter = adapter
 
-        //behaviour when an item is selected
+
+        //define behaviour when an item is selected
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(spinner == sourceSpinner) {
                     //get language selected in the spinners
                     sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
                     sourceLanguageCode = setLanguageCode(sourceSpinner)
-                   // setLanguageCode(sourceLanguageCode, sourceSpinner)
                 } else if (spinner == targetSpinner){
                     targetLanguageCode = setLanguageCode(targetSpinner)
                     targetLanguage = targetSpinner.selectedItem.toString().uppercase()
-                   // setLanguageCode(targetLanguageCode, targetSpinner)
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
         }
     }
 
+    /**
+     * Set the language code for a language using the API language code retrieval mechanism
+     *
+     * @param spinner - The source or target language spinner where the language has been selected
+     * @return the language code the language e.g. en for English
+     */
     private fun setLanguageCode(spinner: Spinner): String{
-        //val languageCode: String =
         return when (spinner.selectedItem.toString()){
             "Afrikaans" -> TranslateLanguage.AFRIKAANS
             "Arabic" -> TranslateLanguage.ARABIC
@@ -329,9 +385,14 @@ class HomeFragment : Fragment(){
             //default to english
             else -> TranslateLanguage.ENGLISH
         }
-       // return languageCode
     }
 
+    /**
+     * Use speech recognizer intent mechanism to get speech input from the user
+     * An alternative would be to use Speech Recognizer
+     *
+     * @param view
+     */
     private fun speak(view: View) {
         val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         speechRecognizerIntent.putExtra(
@@ -349,6 +410,12 @@ class HomeFragment : Fragment(){
 
         }
 
+    }
+
+    private fun restartConversation(){
+        messageList.clear()
+        translator.close()
+        conversationAdapter.notifyDataSetChanged()
     }
 
 
