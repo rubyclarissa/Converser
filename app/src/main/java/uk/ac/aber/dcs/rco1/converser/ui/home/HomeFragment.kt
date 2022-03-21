@@ -133,7 +133,7 @@ class HomeFragment : Fragment(){
                 .requireWifi()
                 .build()
 
-            Toast.makeText(activity, "... translating...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "DEBUG: checking language models", Toast.LENGTH_SHORT).show()
 
             //if text input is not empty
             if (!isEmpty(inputText.text)) {
@@ -157,6 +157,9 @@ class HomeFragment : Fragment(){
                         ).show()*/
                     }
 
+                Toast.makeText(activity, "`DEBUG: translating`", Toast.LENGTH_SHORT).show()
+
+                //TODO: fix as this currently does not translate if model needed downloading
                 //translate the input text using the translator model that was just created
                 translator.translate(homeFragmentBinding.textBox.text.toString())
                     .addOnSuccessListener { translatedText ->
@@ -190,6 +193,8 @@ class HomeFragment : Fragment(){
                         //tell the adapter that a message has been added, so it can update the UI
                         //TODO: use different mechanism to notify change
                         conversationAdapter.notifyDataSetChanged()
+
+                        inputText.text.clear()
 
                     }
                     .addOnFailureListener {
