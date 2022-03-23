@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.aber.dcs.rco1.converser.R
+import uk.ac.aber.dcs.rco1.converser.model.home.Message
 
 /**
  * TODO

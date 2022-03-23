@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.rco1.converser.ui.home
+package uk.ac.aber.dcs.rco1.converser.model.home
 
 /**
  * TODO

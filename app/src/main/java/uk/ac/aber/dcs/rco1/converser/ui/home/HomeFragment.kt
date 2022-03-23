@@ -23,7 +23,7 @@ import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentHomeBinding
-import java.util.*
+import uk.ac.aber.dcs.rco1.converser.model.home.Message
 import kotlin.collections.ArrayList
 
 /**
