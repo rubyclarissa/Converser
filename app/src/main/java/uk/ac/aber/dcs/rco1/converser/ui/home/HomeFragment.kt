@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentHomeBinding
@@ -65,6 +66,9 @@ class HomeFragment : Fragment(){
     private lateinit var languageA: String
     private lateinit var languageB: String
 
+    private val languageModelManager: RemoteModelManager = RemoteModelManager.getInstance()
+    lateinit var downloadedModels: List<String>
+
     /**
      * TODO
      *
@@ -106,7 +110,6 @@ class HomeFragment : Fragment(){
         setListenerForTranslation()
         setListenerForSpeechRecording()
 
-
         return homeFragmentBinding.root
     }
 
@@ -116,8 +119,44 @@ class HomeFragment : Fragment(){
         }
     }
 
+    //get model for a language
+    private fun getLanguageModel(languageCode: String): TranslateRemoteModel {
+        return TranslateRemoteModel.Builder(languageCode).build()
+    }
+
+    // download a language model
+    private fun downloadLanguage(languageCode: String) {
+        val model = getLanguageModel(languageCode)
+        val conditions = DownloadConditions.Builder()
+            .requireWifi()
+            .build()
+        languageModelManager.download(model, conditions)
+    }
+
+    // update list of downloaded models
+    private fun getDownloadedModels() {
+        languageModelManager.getDownloadedModels(TranslateRemoteModel::class.java)
+            .addOnSuccessListener {
+                    models ->
+                //TODO: sort alphabetically
+                downloadedModels = models.map { it.language}
+            }
+    }
+
+    // delete a model and update downloaded models
+    private fun deleteLanguage(languageCode: String) {
+        val model = getLanguageModel(languageCode)
+        languageModelManager.deleteDownloadedModel(model)
+            .addOnCompleteListener {
+                //getDownloadedModels()
+            }
+    }
+
     private fun setListenerForTranslation() {
         translateButton.setOnClickListener {
+            ////////////////////////////////////////////
+
+
             //create translator object with configurations for source and target languages
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(sourceLanguageCode)
@@ -128,10 +167,10 @@ class HomeFragment : Fragment(){
             translator = Translation.getClient(options)
             lifecycle.addObserver(translator)
 
-            //set up conditions for downloading language models
+            /*//set up conditions for downloading language models
             val conditions = DownloadConditions.Builder()
                 .requireWifi()
-                .build()
+                .build()*/
 
             Toast.makeText(activity, "DEBUG: checking language models", Toast.LENGTH_SHORT).show()
 
@@ -139,7 +178,7 @@ class HomeFragment : Fragment(){
             if (!isEmpty(inputText.text)) {
 
                 //download the language models if they are not already downloaded
-                translator.downloadModelIfNeeded(conditions)
+                translator.downloadModelIfNeeded()
                     .addOnSuccessListener {
                         Log.i("TAG", "Downloaded model successfully")
                         Toast.makeText(
@@ -156,50 +195,55 @@ class HomeFragment : Fragment(){
                             Toast.LENGTH_SHORT
                         ).show()*/
                     }
+                    //put translation in here as it works if language model needs downloading
+                    .continueWith { task ->
 
-                Toast.makeText(activity, "`DEBUG: translating`", Toast.LENGTH_SHORT).show()
+                        if (task.isSuccessful){
+                            Toast.makeText(activity, "DEBUG: translating", Toast.LENGTH_SHORT).show()
+                            //TODO: fix as this currently does not translate if model needed downloading
+                            //translate the input text using the translator model that was just created
+                            translator.translate(homeFragmentBinding.textBox.text.toString())
+                                .addOnSuccessListener { translatedText ->
+                                    Log.i("TAG", "Translation is " + translatedText as String)
 
-                //TODO: fix as this currently does not translate if model needed downloading
-                //translate the input text using the translator model that was just created
-                translator.translate(homeFragmentBinding.textBox.text.toString())
-                    .addOnSuccessListener { translatedText ->
-                        Log.i("TAG", "Translation is " + translatedText as String)
+                                    //check if language A (first message translated) or B
+                                    when {
+                                        conversationAdapter.itemCount == 0 -> {
+                                            languageA = sourceLanguage
+                                            languageB = targetLanguage
+                                            language = 'A'
+                                        }
+                                        (conversationAdapter.itemCount > 0) && (sourceLanguage == languageA)
+                                                && (targetLanguage == languageB) -> language = 'A'
+                                        (conversationAdapter.itemCount > 0) && (sourceLanguage == languageB)
+                                                && (targetLanguage == languageA) -> language = 'B'
+                                        else -> {
+                                            //set new language
+                                            languageA = sourceLanguage
+                                            languageB = targetLanguage
+                                            language = 'A'
+                                            restartConversation()
+                                        }
+                                    }
 
-                        //check if language A (first message translated) or B
-                        when {
-                            conversationAdapter.itemCount == 0 -> {
-                                languageA = sourceLanguage
-                                languageB = targetLanguage
-                                language = 'A'
-                            }
-                            (conversationAdapter.itemCount > 0) && (sourceLanguage == languageA)
-                                    && (targetLanguage == languageB) -> language = 'A'
-                            (conversationAdapter.itemCount > 0) && (sourceLanguage == languageB)
-                                    && (targetLanguage == languageA) -> language = 'B'
-                            else -> {
-                                //set new language
-                                languageA = sourceLanguage
-                                languageB = targetLanguage
-                                language = 'A'
-                                restartConversation()
-                            }
+                                    //add a message to the message list (original and translated)
+                                    val originalMessage = inputText.text.toString()
+                                    val messageObject = Message(originalMessage, translatedText, language)
+                                    messageList.add(messageObject)
+
+                                    //tell the adapter that a message has been added, so it can update the UI
+                                    //TODO: use different mechanism to notify change
+                                    conversationAdapter.notifyDataSetChanged()
+
+                                    inputText.text.clear()
+
+                                }
+                                .addOnFailureListener {
+                                    Log.e("TAG", "Translation failed")
+                                }
                         }
-
-                        //add a message to the message list (original and translated)
-                        val originalMessage = inputText.text.toString()
-                        val messageObject = Message(originalMessage, translatedText, language)
-                        messageList.add(messageObject)
-
-                        //tell the adapter that a message has been added, so it can update the UI
-                        //TODO: use different mechanism to notify change
-                        conversationAdapter.notifyDataSetChanged()
-
-                        inputText.text.clear()
-
                     }
-                    .addOnFailureListener {
-                        Log.e("TAG", "Translation failed")
-                    }
+
 
             }
             // no input text to translate
@@ -225,6 +269,7 @@ class HomeFragment : Fragment(){
 
             sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
             targetLanguage = targetSpinner.selectedItem.toString().uppercase()
+
         }
     }
 
@@ -399,16 +444,22 @@ class HomeFragment : Fragment(){
      * @param view
      */
     private fun speak(view: View) {
+        //Starts an activity that will prompt the user for speech and send it through a speech recognizer.
         val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         speechRecognizerIntent.putExtra(
+            //Informs the recognizer which speech model to prefer when performing
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            //Use a language model based on free-form speech recognition.
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        //This tag informs the recognizer to perform speech recognition in a language
+        //TODO: fix for source language
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, sourceLanguageCode)
         //message to see in dialogue box when clicking speech button and waiting for speech input
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "... listening ...")
 
         try {
+            //launch activity results mechanism to perform an action using intent
             activityResultLauncher.launch(speechRecognizerIntent)
             // Toast.makeText(this, "Speech recognition available", Toast.LENGTH_SHORT).show()
         } catch (exp: ActivityNotFoundException) {
@@ -417,9 +468,17 @@ class HomeFragment : Fragment(){
 
     }
 
+    override fun onDestroy() {
+        restartConversation()
+        super.onDestroy()
+    }
+
     private fun restartConversation(){
         messageList.clear()
         translator.close()
+        //TODO: move somewhere else and check if not in downloaded list
+        deleteLanguage(sourceLanguage)
+        deleteLanguage(targetLanguage)
         conversationAdapter.notifyDataSetChanged()
     }
 
