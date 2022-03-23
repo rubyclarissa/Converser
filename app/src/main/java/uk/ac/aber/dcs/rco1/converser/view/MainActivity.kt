@@ -1,13 +1,8 @@
-package uk.ac.aber.dcs.rco1.converser.ui
+package uk.ac.aber.dcs.rco1.converser.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.navigation.fragment.NavHostFragment
-import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.nl.translate.TranslateLanguage
-import com.google.mlkit.nl.translate.Translation
-import com.google.mlkit.nl.translate.TranslatorOptions
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.databinding.ActivityMainBinding
 

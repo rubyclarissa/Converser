@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="uk.ac.aber.dcs.rco1.converser.ui.home.HomeFragment"
+        android:name="uk.ac.aber.dcs.rco1.converser.view.home.HomeFragment"
         android:label="@string/fragmentHome"
         tools:layout="@layout/fragment_home" />
 
