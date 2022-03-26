@@ -24,6 +24,7 @@ import com.google.mlkit.nl.translate.*
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.data.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentHomeBinding
+import uk.ac.aber.dcs.rco1.converser.model.home.PositionInConversation
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 import kotlin.collections.ArrayList
 
@@ -56,14 +57,14 @@ class HomeFragment : Fragment(){
     private var targetLanguage: String = ""
     private var stringToTranslate: String = ""
 
-    //initialise language codes to English by default
+    //initialise positionInConversation codes to English by default
     var sourceLanguageCode = TranslateLanguage.ENGLISH
     var targetLanguageCode = TranslateLanguage.ENGLISH
 
     private lateinit var translator: Translator
 
-    //used for identifying which language is being translated
-    private var language: Char = 'B'
+    //used for identifying which positionInConversation is being translated
+    private var positionInConversation: PositionInConversation = PositionInConversation.SECOND
     private lateinit var languageA: String
     private lateinit var languageB: String
 
@@ -89,7 +90,7 @@ class HomeFragment : Fragment(){
         // Inflate the layout for this fragment
         homeFragmentBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        //set up language selection spinners
+        //set up positionInConversation selection spinners
         setupSpinners()
 
         //get the UI elements via the binding mechanism
@@ -125,12 +126,12 @@ class HomeFragment : Fragment(){
         }
     }
 
-    //get model for a language
+    //get model for a positionInConversation
     private fun getLanguageModel(languageCode: String): TranslateRemoteModel {
         return TranslateRemoteModel.Builder(languageCode).build()
     }
 
-    // download a language model
+    // download a positionInConversation model
     private fun downloadLanguage(languageCode: String) {
         val model = getLanguageModel(languageCode)
         val conditions = DownloadConditions.Builder()
@@ -173,17 +174,17 @@ class HomeFragment : Fragment(){
             translator = Translation.getClient(options)
             lifecycle.addObserver(translator)
 
-            /*//set up conditions for downloading language models
+            /*//set up conditions for downloading positionInConversation models
             val conditions = DownloadConditions.Builder()
                 .requireWifi()
                 .build()*/
 
-            Toast.makeText(activity, "DEBUG: checking language models", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "DEBUG: checking positionInConversation models", Toast.LENGTH_SHORT).show()
 
             //if text input is not empty
             if (!isEmpty(inputText.text)) {
 
-                //download the language models if they are not already downloaded
+                //download the positionInConversation models if they are not already downloaded
                 translator.downloadModelIfNeeded()
                     .addOnSuccessListener {
                         Log.i("TAG", "Downloaded model successfully")
@@ -201,7 +202,7 @@ class HomeFragment : Fragment(){
                             Toast.LENGTH_SHORT
                         ).show()*/
                     }
-                    //put translation in here as it works if language model needs downloading
+                    //put translation in here as it works if positionInConversation model needs downloading
                     .continueWith { task ->
 
                         if (task.isSuccessful){
@@ -211,29 +212,29 @@ class HomeFragment : Fragment(){
                                 .addOnSuccessListener { translatedText ->
                                     Log.i("TAG", "Translation is " + translatedText as String)
 
-                                    //check if language A (first item translated) or B
+                                    //check if positionInConversation A (first item translated) or B
                                     when {
                                         conversationAdapter.itemCount == 0 -> {
                                             languageA = sourceLanguage
                                             languageB = targetLanguage
-                                            language = 'A'
+                                            positionInConversation = PositionInConversation.FIRST
                                         }
                                         (conversationAdapter.itemCount > 0) && (sourceLanguage == languageA)
-                                                && (targetLanguage == languageB) -> language = 'A'
+                                                && (targetLanguage == languageB) -> positionInConversation = PositionInConversation.FIRST
                                         (conversationAdapter.itemCount > 0) && (sourceLanguage == languageB)
-                                                && (targetLanguage == languageA) -> language = 'B'
+                                                && (targetLanguage == languageA) -> positionInConversation = PositionInConversation.SECOND
                                         else -> {
-                                            //set new language
+                                            //set new positionInConversation
                                             languageA = sourceLanguage
                                             languageB = targetLanguage
-                                            language = 'A'
+                                            positionInConversation = PositionInConversation.FIRST
                                             restartConversation()
                                         }
                                     }
 
                                     //add a message to the message list (original and translated)
                                     val originalTranslationItem = inputText.text.toString()
-                                    val translationItemObject = TranslationItem(0, originalTranslationItem, translatedText, language)
+                                    val translationItemObject = TranslationItem(0, originalTranslationItem, translatedText, positionInConversation)
                                     translationItemList.add(translationItemObject)
                                     repository.insert(translationItemObject)
 
@@ -269,9 +270,9 @@ class HomeFragment : Fragment(){
     private fun setListenerForLanguageSwap() {
         swapButton.setOnClickListener {
             //swap text in spinners
-            //get source language and put in temp target
+            //get source positionInConversation and put in temp target
             val tempTargetLanguage = sourceSpinner.selectedItemPosition
-            //get target language and put in source
+            //get target positionInConversation and put in source
             sourceSpinner.setSelection(targetSpinner.selectedItemPosition)
             //put temp target in target
             targetSpinner.setSelection(tempTargetLanguage)
@@ -316,7 +317,7 @@ class HomeFragment : Fragment(){
     }
 
     /**
-     * Set up the source and target language spinners using appropriate resources
+     * Set up the source and target positionInConversation spinners using appropriate resources
      *
      */
     private fun setupSpinners(){
@@ -333,7 +334,7 @@ class HomeFragment : Fragment(){
      * Set up an individual spinner to provide a selection of languages
      *
      * @param view - the current view
-     * @param spinner - The spinner being set up (source or target language lists)
+     * @param spinner - The spinner being set up (source or target positionInConversation lists)
      * @param arrayResourceId - The array of languages stored as a strings array value
      */
     private fun setupSpinner(view: View?, spinner: Spinner, arrayResourceId: Int){
@@ -360,7 +361,7 @@ class HomeFragment : Fragment(){
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(spinner == sourceSpinner) {
-                    //get language selected in the spinners
+                    //get positionInConversation selected in the spinners
                     sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
                     sourceLanguageCode = setLanguageCode(sourceSpinner)
                 } else if (spinner == targetSpinner){
@@ -375,10 +376,10 @@ class HomeFragment : Fragment(){
     }
 
     /**
-     * Set the language code for a language using the API language code retrieval mechanism
+     * Set the positionInConversation code for a positionInConversation using the API positionInConversation code retrieval mechanism
      *
-     * @param spinner - The source or target language spinner where the language has been selected
-     * @return the language code the language e.g. en for English
+     * @param spinner - The source or target positionInConversation spinner where the positionInConversation has been selected
+     * @return the positionInConversation code the positionInConversation e.g. en for English
      */
     private fun setLanguageCode(spinner: Spinner): String{
         return when (spinner.selectedItem.toString()){
@@ -458,10 +459,10 @@ class HomeFragment : Fragment(){
         speechRecognizerIntent.putExtra(
             //Informs the recognizer which speech model to prefer when performing
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            //Use a language model based on free-form speech recognition.
+            //Use a positionInConversation model based on free-form speech recognition.
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
-        //This tag informs the recognizer to perform speech recognition in a language
+        //This tag informs the recognizer to perform speech recognition in a positionInConversation
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, sourceLanguageCode)
         //message to see in dialogue box when clicking speech button and waiting for speech input
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Please speak now")
@@ -476,14 +477,21 @@ class HomeFragment : Fragment(){
 
     }
 
-    override fun onDestroy() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        repository = ConverserRepository(requireActivity().application)
         repository.deleteAll()
+        super.onCreate(savedInstanceState)
+    }
+
+//TODO: fix so that conversation is deleted before closing app instead of whe you open it
+    override fun onDestroy() {
         restartConversation()
         super.onDestroy()
     }
 
     private fun restartConversation(){
         translationItemList.clear()
+        repository.deleteAll()
         translator.close()
         //TODO: move somewhere else and check if not in downloaded list
         deleteLanguage(sourceLanguage)

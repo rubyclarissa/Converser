@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.aber.dcs.rco1.converser.R
+import uk.ac.aber.dcs.rco1.converser.model.home.PositionInConversation
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 
 /**
@@ -15,14 +16,16 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
  * @property context
  * @property translationItemList
  */
+
+const val FIRST_LANGUAGE_IN_COVERSATION = 1
+const val SECOND_LANGUAGE_IN_COVERSATION = 2
+
 class ConversationAdapter(
     val context: Context,
     val translationItemList: ArrayList<TranslationItem>,
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var clickListener: View.OnClickListener? = null
-    private val A = 1
-    private val B = 2
 
     /**
      * TODO
@@ -59,10 +62,10 @@ class ConversationAdapter(
     override fun getItemViewType(position: Int): Int {
         val currentTranslationItem = translationItemList[position]
 
-        return if (currentTranslationItem.language == 'A'){
-            A
+        return if (currentTranslationItem.language == PositionInConversation.FIRST){
+            FIRST_LANGUAGE_IN_COVERSATION
         } else{
-            B
+            SECOND_LANGUAGE_IN_COVERSATION
         }
     }
 

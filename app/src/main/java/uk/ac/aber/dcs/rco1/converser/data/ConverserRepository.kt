@@ -19,8 +19,13 @@ class ConverserRepository(application: Application) {
         }
     }
 
+    fun deleteAll(){
+        coroutineScope.launch {
+            messageDao.deleteAll()
+        }
+    }
+
     //as these return live data, they are automatically run in another thread
-    fun deleteAll() = messageDao.deleteAll()
 
     fun getAllMessages() = messageDao.getAllMessages()
 

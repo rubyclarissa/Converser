@@ -15,4 +15,4 @@ data class TranslationItem(
     var id: Int = 0,
     val originalTranslationItem: String?,
     val translatedTranslationItem: String?,
-    val language: Char?){}
+    val language: PositionInConversation){}
