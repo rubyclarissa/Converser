@@ -477,13 +477,14 @@ class HomeFragment : Fragment(){
 
     }
 
+    //TODO: fix and remove this as it will delete the DB when device is rotated
     override fun onCreate(savedInstanceState: Bundle?) {
         repository = ConverserRepository(requireActivity().application)
         repository.deleteAll()
         super.onCreate(savedInstanceState)
     }
 
-//TODO: fix so that conversation is deleted before closing app instead of whe you open it
+//TODO: fix so that conversation is deleted before closing app instead of in ocreate
     override fun onDestroy() {
         restartConversation()
         super.onDestroy()

@@ -109,14 +109,14 @@ class ConversationAdapter(
             //do stuff for language a view holder
 
             val viewHolder = holder as LanguageAViewHolder
-            holder.originalTranslationItemA.text = currentTranslationItem.originalTranslationItem
-            holder.translatedTranslationItemA.text = currentTranslationItem.translatedTranslationItem
+            viewHolder.originalTranslationItemA.text = currentTranslationItem.originalTranslationItem
+            viewHolder.translatedTranslationItemA.text = currentTranslationItem.translatedTranslationItem
 
         } else{
             //dostaff for language b view holder
             val viewHolder = holder as LanguageBViewHolder
-            holder.originalTranslationItemB.text = currentTranslationItem.originalTranslationItem
-            holder.translatedTranslationItemB.text = currentTranslationItem.translatedTranslationItem
+            viewHolder.originalTranslationItemB.text = currentTranslationItem.originalTranslationItem
+            viewHolder.translatedTranslationItemB.text = currentTranslationItem.translatedTranslationItem
         }
     }
 
