@@ -74,6 +74,9 @@ class HomeFragment : Fragment(){
     //TODO: change later as dont want in home fragment
     private lateinit var repository: ConverserRepository
 
+    //needed for dialogue support
+    //private val supportFragmentManager = parentFragmentManager
+
     /**
      * TODO
      *
@@ -89,6 +92,7 @@ class HomeFragment : Fragment(){
     ): View? {
         // Inflate the layout for this fragment
         homeFragmentBinding = FragmentHomeBinding.inflate(inflater, container, false)
+
 
         //set up positionInConversation selection spinners
         setupSpinners()
@@ -179,10 +183,11 @@ class HomeFragment : Fragment(){
                 .requireWifi()
                 .build()*/
 
-            Toast.makeText(activity, "DEBUG: checking positionInConversation models", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Downloading language model", Toast.LENGTH_LONG).show()
 
             //if text input is not empty
             if (!isEmpty(inputText.text)) {
+
 
                 //download the positionInConversation models if they are not already downloaded
                 translator.downloadModelIfNeeded()
@@ -190,7 +195,7 @@ class HomeFragment : Fragment(){
                         Log.i("TAG", "Downloaded model successfully")
                         Toast.makeText(
                             activity,
-                            "DEBUG: Downloaded model successfully",
+                            "Downloaded model successfully",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -206,7 +211,8 @@ class HomeFragment : Fragment(){
                     .continueWith { task ->
 
                         if (task.isSuccessful){
-                            Toast.makeText(activity, "DEBUG: translating", Toast.LENGTH_SHORT).show()
+
+                            Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
                             //translate the input text using the translator model that was just created
                             translator.translate(homeFragmentBinding.textBox.text.toString())
                                 .addOnSuccessListener { translatedText ->
@@ -262,6 +268,12 @@ class HomeFragment : Fragment(){
             }
         }
     }
+
+
+/*    fun showDownloadingLanguageModelDialog(){
+        val dialogue = DownloadLanguageModelDialogFragment()
+        dialogue.show(supportFragmentManager, "download")
+    }*/
 
     /**
      * Sets a listener when the swap button is pressed
