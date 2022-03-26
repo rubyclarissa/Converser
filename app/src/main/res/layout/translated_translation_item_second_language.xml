@@ -18,7 +18,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/languageBOriginalMessage"
+            android:id="@+id/languageBOriginalTranslationItem"
             android:layout_width="wrap_content"
             android:minWidth="100dp"
             android:layout_height="wrap_content"
@@ -27,25 +27,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!--
-    <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@id/languageBOriginalMessage"
-        app:layout_constraintEnd_toEndOf="parent"/>
-        -->
-
         <TextView
-            android:id="@+id/languageBTranslatedMessage"
+            android:id="@+id/languageBTranslatedTranslationItem"
             android:layout_width="wrap_content"
             android:minWidth="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textAlignment="viewEnd"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/languageBOriginalMessage" />
+            app:layout_constraintTop_toBottomOf="@id/languageBOriginalTranslationItem" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

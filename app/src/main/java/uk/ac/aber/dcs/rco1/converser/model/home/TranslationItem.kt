@@ -4,18 +4,18 @@ package uk.ac.aber.dcs.rco1.converser.model.home
  * TODO
  *
  */
-class Message() {
+class TranslationItem() {
 
-    var originalMessage: String? = null
-    var translatedMessage: String? = null
+    var originalTranslationItem: String? = null
+    var translatedTranslationItem: String? = null
     var language: Char? = null
 
     /**
      *
      */
     constructor(originalMessage: String?, translatedMessage: String?, language: Char?) : this() {
-        this.originalMessage = originalMessage
-        this.translatedMessage = translatedMessage
+        this.originalTranslationItem = originalMessage
+        this.translatedTranslationItem = translatedMessage
         this.language = language
     }
 }

@@ -23,7 +23,7 @@ import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentHomeBinding
-import uk.ac.aber.dcs.rco1.converser.model.home.Message
+import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 import kotlin.collections.ArrayList
 
 /**
@@ -41,7 +41,7 @@ class HomeFragment : Fragment(){
     private lateinit var translateButton: ImageButton
     private lateinit var micFAB: ImageButton
     private lateinit var swapButton: ImageButton
-    private lateinit var messageRecyclerView: RecyclerView
+    private lateinit var translationItemRecyclerView: RecyclerView
     private lateinit var inputText: EditText
     private lateinit var sourceSpinner: Spinner
     private lateinit var targetSpinner: Spinner
@@ -49,7 +49,7 @@ class HomeFragment : Fragment(){
     //adapter for the conversation recycler view
     private lateinit var conversationAdapter: ConversationAdapter
     //list of translations in a conversation
-    private lateinit var messageList : ArrayList<Message>
+    private lateinit var translationItemList : ArrayList<TranslationItem>
 
     private var sourceLanguage: String = ""
     private var targetLanguage: String = ""
@@ -95,13 +95,13 @@ class HomeFragment : Fragment(){
         displaySpeechToText()
 
         //find and configure conversation recycler view
-        messageList = ArrayList()
-        conversationAdapter = ConversationAdapter(requireContext(), messageList)
-        messageRecyclerView.adapter = conversationAdapter
+        translationItemList = ArrayList()
+        conversationAdapter = ConversationAdapter(requireContext(), translationItemList)
+        translationItemRecyclerView.adapter = conversationAdapter
         //val conversation = homeFragmentBinding.conversationRecyclerView
         val conversationLayoutManager = LinearLayoutManager(context)
         //conversationLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        messageRecyclerView.layoutManager = conversationLayoutManager
+        translationItemRecyclerView.layoutManager = conversationLayoutManager
 
         stringToTranslate = inputText.text.toString()
 
@@ -200,13 +200,12 @@ class HomeFragment : Fragment(){
 
                         if (task.isSuccessful){
                             Toast.makeText(activity, "DEBUG: translating", Toast.LENGTH_SHORT).show()
-                            //TODO: fix as this currently does not translate if model needed downloading
                             //translate the input text using the translator model that was just created
                             translator.translate(homeFragmentBinding.textBox.text.toString())
                                 .addOnSuccessListener { translatedText ->
                                     Log.i("TAG", "Translation is " + translatedText as String)
 
-                                    //check if language A (first message translated) or B
+                                    //check if language A (first item translated) or B
                                     when {
                                         conversationAdapter.itemCount == 0 -> {
                                             languageA = sourceLanguage
@@ -227,16 +226,16 @@ class HomeFragment : Fragment(){
                                     }
 
                                     //add a message to the message list (original and translated)
-                                    val originalMessage = inputText.text.toString()
-                                    val messageObject = Message(originalMessage, translatedText, language)
-                                    messageList.add(messageObject)
+                                    val originalTranslationItem = inputText.text.toString()
+                                    val translationItemObject = TranslationItem(originalTranslationItem, translatedText, language)
+                                    translationItemList.add(translationItemObject)
 
                                     //tell the adapter that a message has been added, so it can update the UI
                                     //TODO: use different mechanism to notify change
                                     conversationAdapter.notifyDataSetChanged()
 
                                     //autoscroll to bottom of message list
-                                    messageRecyclerView.smoothScrollToPosition(messageList.size - 1)
+                                    translationItemRecyclerView.smoothScrollToPosition(translationItemList.size - 1)
 
                                     inputText.text.clear()
 
@@ -300,7 +299,7 @@ class HomeFragment : Fragment(){
      *
      */
     private fun getUIElements() {
-        messageRecyclerView = homeFragmentBinding.conversationRecyclerView
+        translationItemRecyclerView = homeFragmentBinding.conversationRecyclerView
         inputText = homeFragmentBinding.textBox
         translateButton = homeFragmentBinding.translateButton
         micFAB = homeFragmentBinding.recordVoice
@@ -456,10 +455,9 @@ class HomeFragment : Fragment(){
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
         //This tag informs the recognizer to perform speech recognition in a language
-        //TODO: fix for source language
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, sourceLanguageCode)
         //message to see in dialogue box when clicking speech button and waiting for speech input
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "... listening ...")
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Please speak now")
 
         try {
             //launch activity results mechanism to perform an action using intent
@@ -477,7 +475,7 @@ class HomeFragment : Fragment(){
     }
 
     private fun restartConversation(){
-        messageList.clear()
+        translationItemList.clear()
         translator.close()
         //TODO: move somewhere else and check if not in downloaded list
         deleteLanguage(sourceLanguage)

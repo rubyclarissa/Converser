@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.aber.dcs.rco1.converser.R
-import uk.ac.aber.dcs.rco1.converser.model.home.Message
+import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 
 /**
  * TODO
  *
  * @property context
- * @property messageList
+ * @property translationItemList
  */
 class ConversationAdapter(
     val context: Context,
-    val messageList: ArrayList<Message>,
+    val translationItemList: ArrayList<TranslationItem>,
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var clickListener: View.OnClickListener? = null
@@ -33,8 +33,8 @@ class ConversationAdapter(
      * @param itemView
      */
     inner class LanguageAViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val originalMessageA: TextView = itemView.findViewById<TextView>(R.id.languageAOriginalMessage)
-        val translatedMessageA: TextView = itemView.findViewById<TextView>(R.id.languageATranslatedMessage)
+        val originalTranslationItemA: TextView = itemView.findViewById<TextView>(R.id.languageAOriginalTranslationItem)
+        val translatedTranslationItemA: TextView = itemView.findViewById<TextView>(R.id.languageATranslatedTranslationItem)
     }
 
     /**
@@ -46,8 +46,8 @@ class ConversationAdapter(
      * @param itemView
      */
     inner class LanguageBViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val originalMessageB = itemView.findViewById<TextView>(R.id.languageBOriginalMessage)
-        val translatedlMessageB = itemView.findViewById<TextView>(R.id.languageBTranslatedMessage)
+        val originalTranslationItemB = itemView.findViewById<TextView>(R.id.languageBOriginalTranslationItem)
+        val translatedTranslationItemB = itemView.findViewById<TextView>(R.id.languageBTranslatedTranslationItem)
     }
 
     /**
@@ -57,9 +57,9 @@ class ConversationAdapter(
      * @return
      */
     override fun getItemViewType(position: Int): Int {
-        val currentMessage = messageList[position]
+        val currentTranslationItem = translationItemList[position]
 
-        return if (currentMessage.language == 'A'){
+        return if (currentTranslationItem.language == 'A'){
             A
         } else{
             B
@@ -78,14 +78,14 @@ class ConversationAdapter(
         if (viewType == 1){
             //inflate language a
             val view: View = LayoutInflater.from(context).inflate(
-                R.layout.translated_message_item_first_language,
+                R.layout.translated_translation_item_first_language,
                 parent,
                 false)
             return LanguageAViewHolder(view)
         } else{
             //inflate language b
             val view: View = LayoutInflater.from(context).inflate(
-                R.layout.translated_message_item_second_language,
+                R.layout.translated_translation_item_second_language,
                 parent,
                 false)
             return LanguageBViewHolder(view)
@@ -100,20 +100,20 @@ class ConversationAdapter(
      */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        val currentMessage = messageList[position]
+        val currentTranslationItem = translationItemList[position]
 
         if (holder.javaClass == LanguageAViewHolder::class.java){
             //do stuff for language a view holder
 
             val viewHolder = holder as LanguageAViewHolder
-            holder.originalMessageA.text = currentMessage.originalMessage
-            holder.translatedMessageA.text = currentMessage.translatedMessage
+            holder.originalTranslationItemA.text = currentTranslationItem.originalTranslationItem
+            holder.translatedTranslationItemA.text = currentTranslationItem.translatedTranslationItem
 
         } else{
             //dostaff for language b view holder
             val viewHolder = holder as LanguageBViewHolder
-            holder.originalMessageB.text = currentMessage.originalMessage
-            holder.translatedlMessageB.text = currentMessage.translatedMessage
+            holder.originalTranslationItemB.text = currentTranslationItem.originalTranslationItem
+            holder.translatedTranslationItemB.text = currentTranslationItem.translatedTranslationItem
         }
     }
 
@@ -123,7 +123,7 @@ class ConversationAdapter(
      * @return
      */
     override fun getItemCount(): Int {
-       return messageList.size
+       return translationItemList.size
     }
 
 }
