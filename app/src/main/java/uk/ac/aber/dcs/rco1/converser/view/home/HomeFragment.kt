@@ -235,6 +235,9 @@ class HomeFragment : Fragment(){
                                     //TODO: use different mechanism to notify change
                                     conversationAdapter.notifyDataSetChanged()
 
+                                    //autoscroll to bottom of message list
+                                    messageRecyclerView.smoothScrollToPosition(messageList.size - 1)
+
                                     inputText.text.clear()
 
                                 }
