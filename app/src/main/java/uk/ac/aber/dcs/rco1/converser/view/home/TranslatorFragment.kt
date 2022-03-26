@@ -23,7 +23,7 @@ import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.data.ConverserRepository
-import uk.ac.aber.dcs.rco1.converser.databinding.FragmentHomeBinding
+import uk.ac.aber.dcs.rco1.converser.databinding.FragmentTranslatorBinding
 import uk.ac.aber.dcs.rco1.converser.model.home.PositionInConversation
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 import kotlin.collections.ArrayList
@@ -32,9 +32,9 @@ import kotlin.collections.ArrayList
  * TODO
  *
  */
-class HomeFragment : Fragment(){
+class TranslatorFragment : Fragment(){
 
-    private lateinit var homeFragmentBinding: FragmentHomeBinding
+    private lateinit var homeFragmentBinding: FragmentTranslatorBinding
 
     //used instead of the depreciated startActivityForResult in speak method
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
@@ -91,7 +91,7 @@ class HomeFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        homeFragmentBinding = FragmentHomeBinding.inflate(inflater, container, false)
+        homeFragmentBinding = FragmentTranslatorBinding.inflate(inflater, container, false)
 
 
         //set up positionInConversation selection spinners

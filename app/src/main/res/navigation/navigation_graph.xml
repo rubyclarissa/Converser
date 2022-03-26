@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="uk.ac.aber.dcs.rco1.converser.view.home.HomeFragment"
+        android:name="uk.ac.aber.dcs.rco1.converser.view.home.TranslatorFragment"
         android:label="@string/fragmentHome"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_translator" />
 
 </navigation>
