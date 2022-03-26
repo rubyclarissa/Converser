@@ -1,21 +1,18 @@
 package uk.ac.aber.dcs.rco1.converser.model.home
 
+import androidx.annotation.NonNull
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 /**
  * TODO
  *
  */
-class TranslationItem() {
-
-    var originalTranslationItem: String? = null
-    var translatedTranslationItem: String? = null
-    var language: Char? = null
-
-    /**
-     *
-     */
-    constructor(originalMessage: String?, translatedMessage: String?, language: Char?) : this() {
-        this.originalTranslationItem = originalMessage
-        this.translatedTranslationItem = translatedMessage
-        this.language = language
-    }
-}
+@Entity(tableName = "translationItems")
+data class TranslationItem(
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    var id: Int = 0,
+    val originalTranslationItem: String?,
+    val translatedTranslationItem: String?,
+    val language: Char?){}

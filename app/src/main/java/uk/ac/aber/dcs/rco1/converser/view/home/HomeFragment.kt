@@ -22,6 +22,7 @@ import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import uk.ac.aber.dcs.rco1.converser.R
+import uk.ac.aber.dcs.rco1.converser.data.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentHomeBinding
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 import kotlin.collections.ArrayList
@@ -69,6 +70,9 @@ class HomeFragment : Fragment(){
     private val languageModelManager: RemoteModelManager = RemoteModelManager.getInstance()
     lateinit var downloadedModels: List<String>
 
+    //TODO: change later as dont want in home fragment
+    private lateinit var repository: ConverserRepository
+
     /**
      * TODO
      *
@@ -109,6 +113,8 @@ class HomeFragment : Fragment(){
         setListenerForLanguageSwap()
         setListenerForTranslation()
         setListenerForSpeechRecording()
+
+        repository = ConverserRepository(requireActivity().application)
 
         return homeFragmentBinding.root
     }
@@ -227,8 +233,9 @@ class HomeFragment : Fragment(){
 
                                     //add a message to the message list (original and translated)
                                     val originalTranslationItem = inputText.text.toString()
-                                    val translationItemObject = TranslationItem(originalTranslationItem, translatedText, language)
+                                    val translationItemObject = TranslationItem(0, originalTranslationItem, translatedText, language)
                                     translationItemList.add(translationItemObject)
+                                    repository.insert(translationItemObject)
 
                                     //tell the adapter that a message has been added, so it can update the UI
                                     //TODO: use different mechanism to notify change
@@ -470,6 +477,7 @@ class HomeFragment : Fragment(){
     }
 
     override fun onDestroy() {
+        repository.deleteAll()
         restartConversation()
         super.onDestroy()
     }
