@@ -22,7 +22,7 @@ const val SECOND_LANGUAGE_IN_COVERSATION = 2
 
 class ConversationAdapter(
     val context: Context,
-    val translationItemList: ArrayList<TranslationItem>,
+    var translationItemList: ArrayList<TranslationItem>,
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var clickListener: View.OnClickListener? = null
@@ -113,7 +113,7 @@ class ConversationAdapter(
             viewHolder.translatedTranslationItemA.text = currentTranslationItem.translatedTranslationItem
 
         } else{
-            //dostaff for language b view holder
+            //do staff for language b view holder
             val viewHolder = holder as LanguageBViewHolder
             viewHolder.originalTranslationItemB.text = currentTranslationItem.originalTranslationItem
             viewHolder.translatedTranslationItemB.text = currentTranslationItem.translatedTranslationItem
@@ -128,5 +128,10 @@ class ConversationAdapter(
     override fun getItemCount(): Int {
        return translationItemList.size
     }
+
+   /* fun changeDataSet(dataSet: List<TranslationItem>){
+        this.translationItemList = dataSet
+        dataSet.notifyDataSetChanged()
+    }*/
 
 }

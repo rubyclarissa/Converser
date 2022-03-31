@@ -16,16 +16,21 @@ import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.data.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentTranslatorBinding
 import uk.ac.aber.dcs.rco1.converser.model.home.PositionInConversation
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
+import uk.ac.aber.dcs.rco1.converser.viewModel.TranslatorViewModel
 import kotlin.collections.ArrayList
 
 /**
@@ -69,13 +74,15 @@ class TranslatorFragment : Fragment(){
     private lateinit var languageB: String
 
     private val languageModelManager: RemoteModelManager = RemoteModelManager.getInstance()
-    lateinit var downloadedModels: List<String>
+    private var downloadedModels: List<String> = listOf("")
 
     //TODO: change later as dont want in home fragment
     private lateinit var repository: ConverserRepository
 
     //needed for dialogue support
     //private val supportFragmentManager = parentFragmentManager
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     /**
      * TODO
@@ -93,6 +100,20 @@ class TranslatorFragment : Fragment(){
         // Inflate the layout for this fragment
         homeFragmentBinding = FragmentTranslatorBinding.inflate(inflater, container, false)
 
+        //viewmodel set up
+        //uses proprety delegate from fragment ktx artefact instead of making an object
+        // TODO: research
+        val translatorViewModel: TranslatorViewModel by viewModels()
+        //ask view model for list of translator items
+        val translationItems = translatorViewModel.translationItems
+
+        //viewLifecycleOwner instead of 'this' - inherited from superclass (only want to observe
+        //items if there is a UI. could say 'this' but at some points the fragment want have UI
+        //components e.g. before its built / after destroyed - will get exception thrown. viewlco
+        //will only trigger observer if there is an UI - will always work
+        translationItems.observe(viewLifecycleOwner){ translations ->
+
+        }
 
         //set up positionInConversation selection spinners
         setupSpinners()
@@ -183,21 +204,37 @@ class TranslatorFragment : Fragment(){
                 .requireWifi()
                 .build()*/
 
-            Toast.makeText(activity, "Downloading language model", Toast.LENGTH_LONG).show()
+            //Toast.makeText(activity, "Downloading language model", Toast.LENGTH_LONG).show()
 
             //if text input is not empty
             if (!isEmpty(inputText.text)) {
 
 
-                //download the positionInConversation models if they are not already downloaded
+                //TODO: fix to not do translation until these are downloaded
+               getDownloadedModels()
+                if (!downloadedModels.contains(sourceLanguage)){
+                    Toast.makeText( activity, "Downloading, please wait",
+                        Toast.LENGTH_SHORT).show()
+                    downloadLanguage(sourceLanguageCode)
+                    getDownloadedModels()
+                }
+                if (!downloadedModels.contains(targetLanguage)){
+                    Toast.makeText( activity, "Downloading, please wait",
+                        Toast.LENGTH_SHORT).show()
+                    downloadLanguage(targetLanguageCode)
+                    getDownloadedModels()
+                }
+
+
+                //download the language models if they are not already downloaded
                 translator.downloadModelIfNeeded()
                     .addOnSuccessListener {
                         Log.i("TAG", "Downloaded model successfully")
-                        Toast.makeText(
+                        /*Toast.makeText(
                             activity,
                             "Downloaded model successfully",
                             Toast.LENGTH_SHORT
-                        ).show()
+                        ).show()*/
                     }
                     .addOnFailureListener {
                         Log.e("TAG", "Model could not be downloaded")
@@ -212,7 +249,7 @@ class TranslatorFragment : Fragment(){
 
                         if (task.isSuccessful){
 
-                            Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
+                          //  Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
                             //translate the input text using the translator model that was just created
                             translator.translate(homeFragmentBinding.textBox.text.toString())
                                 .addOnSuccessListener { translatedText ->
@@ -268,6 +305,7 @@ class TranslatorFragment : Fragment(){
             }
         }
     }
+
 
 
 /*    fun showDownloadingLanguageModelDialog(){
@@ -374,11 +412,11 @@ class TranslatorFragment : Fragment(){
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(spinner == sourceSpinner) {
                     //get positionInConversation selected in the spinners
-                    sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
+                    sourceLanguage = sourceSpinner.selectedItem.toString()
                     sourceLanguageCode = setLanguageCode(sourceSpinner)
                 } else if (spinner == targetSpinner){
                     targetLanguageCode = setLanguageCode(targetSpinner)
-                    targetLanguage = targetSpinner.selectedItem.toString().uppercase()
+                    targetLanguage = targetSpinner.selectedItem.toString()
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {

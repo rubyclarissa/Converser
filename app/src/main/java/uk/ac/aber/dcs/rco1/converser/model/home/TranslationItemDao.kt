@@ -14,7 +14,7 @@ interface TranslationItemDao {
     fun deleteAll()
 
     @Query("SELECT * FROM translationItems")
-    fun getAllMessages(): LiveData<TranslationItem>
+    fun getAllMessages(): LiveData<List<TranslationItem>>
 
     @Query("SELECT * FROM translationItems WHERE language = 'A'")
     fun getLanguageAMessages(): LiveData<TranslationItem>

@@ -15,7 +15,7 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItemDao
 abstract class ConverserRoomDatabase: RoomDatabase(){
 
     //way to get hold of a MessageDao object - Room generates code for this
-    abstract fun messageDao():TranslationItemDao
+    abstract fun translationItemDao():TranslationItemDao
 
     //allow way to make object of the DB as room insists on this being an abstract class
     companion object{
