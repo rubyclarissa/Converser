@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.rco1.converser.data
+package uk.ac.aber.dcs.rco1.converser.model
 
 import android.app.Application
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +15,7 @@ class ConverserRepository(application: Application) {
     //use coroutines to start operation
     fun insert(translationItem: TranslationItem){
         coroutineScope.launch {
-            translationItemDao.insertSingleMessage(translationItem)
+            translationItemDao.insertSingleTranslationItem(translationItem)
         }
     }
 
@@ -27,6 +27,6 @@ class ConverserRepository(application: Application) {
 
     //as these return live data, they are automatically run in another thread
 
-    fun getAllTranslationItems() = translationItemDao.getAllMessages()
+    fun getAllTranslationItems() = translationItemDao.getAllTranslationItems()
 
 }

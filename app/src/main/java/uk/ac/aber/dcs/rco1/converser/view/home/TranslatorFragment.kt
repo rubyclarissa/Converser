@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.mlkit.common.model.DownloadConditions
@@ -24,9 +25,8 @@ import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import uk.ac.aber.dcs.rco1.converser.R
-import uk.ac.aber.dcs.rco1.converser.data.ConverserRepository
+import uk.ac.aber.dcs.rco1.converser.model.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentTranslatorBinding
 import uk.ac.aber.dcs.rco1.converser.model.home.PositionInConversation
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
@@ -83,6 +83,11 @@ class TranslatorFragment : Fragment(){
     //private val supportFragmentManager = parentFragmentManager
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+   private var oldConversationData: LiveData<List<TranslationItem>>? = null
+
+    //uses proprety delegate from fragment ktx artefact instead of making an object
+    // TODO: research
+    val translatorViewModel: TranslatorViewModel by viewModels()
 
     /**
      * TODO
@@ -100,21 +105,6 @@ class TranslatorFragment : Fragment(){
         // Inflate the layout for this fragment
         homeFragmentBinding = FragmentTranslatorBinding.inflate(inflater, container, false)
 
-        //viewmodel set up
-        //uses proprety delegate from fragment ktx artefact instead of making an object
-        // TODO: research
-        val translatorViewModel: TranslatorViewModel by viewModels()
-        //ask view model for list of translator items
-        val translationItems = translatorViewModel.translationItems
-
-        //viewLifecycleOwner instead of 'this' - inherited from superclass (only want to observe
-        //items if there is a UI. could say 'this' but at some points the fragment want have UI
-        //components e.g. before its built / after destroyed - will get exception thrown. viewlco
-        //will only trigger observer if there is an UI - will always work
-        translationItems.observe(viewLifecycleOwner){ translations ->
-
-        }
-
         //set up positionInConversation selection spinners
         setupSpinners()
 
@@ -126,12 +116,34 @@ class TranslatorFragment : Fragment(){
 
         //find and configure conversation recycler view
         translationItemList = ArrayList()
-        conversationAdapter = ConversationAdapter(requireContext(), translationItemList)
+        conversationAdapter = ConversationAdapter(requireContext())
         translationItemRecyclerView.adapter = conversationAdapter
+
+
         //val conversation = homeFragmentBinding.conversationRecyclerView
         val conversationLayoutManager = LinearLayoutManager(context)
         //conversationLayoutManager.orientation = LinearLayoutManager.VERTICAL
         translationItemRecyclerView.layoutManager = conversationLayoutManager
+
+        ///////
+        //viewmodel set up
+        //ask view model for list of translator items
+        val translationItems = translatorViewModel.translationItems
+
+        //if it returns a new list object then remove observers associated with old one
+        if (oldConversationData != translationItems){
+            oldConversationData?.removeObservers(viewLifecycleOwner)
+            oldConversationData = translationItems
+        }
+        if (!translationItems.hasObservers()){
+            //viewLifecycleOwner instead of 'this' - inherited from superclass (only want to observe
+            //items if there is a UI. could say 'this' but at some points the fragment want have UI
+            //components e.g. before its built / after destroyed - will get exception thrown. viewlco
+            //will only trigger observer if there is an UI - will always work
+            translationItems.observe(viewLifecycleOwner){ translations ->
+                conversationAdapter.changeDataSet(translations.toMutableList())
+            }
+        }
 
         stringToTranslate = inputText.text.toString()
 
@@ -146,6 +158,11 @@ class TranslatorFragment : Fragment(){
     }
 
     private fun setListenerForSpeechRecording() {
+        //support if user presses and holds
+        micFAB.setOnLongClickListener {
+            speak(homeFragmentBinding.recordVoice)
+        }
+        //support if user just presses
         micFAB.setOnClickListener {
             speak(homeFragmentBinding.recordVoice)
         }
@@ -279,11 +296,15 @@ class TranslatorFragment : Fragment(){
                                     val originalTranslationItem = inputText.text.toString()
                                     val translationItemObject = TranslationItem(0, originalTranslationItem, translatedText, positionInConversation)
                                     translationItemList.add(translationItemObject)
-                                    repository.insert(translationItemObject)
+                                   // repository.insert(translationItemObject)
 
                                     //tell the adapter that a message has been added, so it can update the UI
                                     //TODO: use different mechanism to notify change
-                                    conversationAdapter.notifyDataSetChanged()
+                                   // conversationAdapter.notifyDataSetChanged()
+                                    translatorViewModel.addTranslationItemToConversation(translationItemObject)
+
+
+                                    /////
 
                                     //autoscroll to bottom of message list
                                     translationItemRecyclerView.smoothScrollToPosition(translationItemList.size - 1)
@@ -296,7 +317,6 @@ class TranslatorFragment : Fragment(){
                                 }
                         }
                     }
-
 
             }
             // no input text to translate
@@ -503,7 +523,7 @@ class TranslatorFragment : Fragment(){
      *
      * @param view
      */
-    private fun speak(view: View) {
+    private fun speak(view: View): Boolean {
         //Starts an activity that will prompt the user for speech and send it through a speech recognizer.
         val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         speechRecognizerIntent.putExtra(
@@ -524,7 +544,7 @@ class TranslatorFragment : Fragment(){
         } catch (exp: ActivityNotFoundException) {
 
         }
-
+        return true
     }
 
     //TODO: fix and remove this as it will delete the DB when device is rotated

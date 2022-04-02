@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.rco1.converser.data
+package uk.ac.aber.dcs.rco1.converser.model
 
 import android.content.Context
 import androidx.room.Database

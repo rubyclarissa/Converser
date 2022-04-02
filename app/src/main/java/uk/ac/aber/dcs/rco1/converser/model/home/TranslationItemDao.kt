@@ -8,13 +8,13 @@ import androidx.room.Query
 @Dao
 interface TranslationItemDao {
     @Insert
-    fun insertSingleMessage(translationItem: TranslationItem)
+    fun insertSingleTranslationItem(translationItem: TranslationItem)
 
     @Query("DELETE FROM translationItems")
     fun deleteAll()
 
     @Query("SELECT * FROM translationItems")
-    fun getAllMessages(): LiveData<List<TranslationItem>>
+    fun getAllTranslationItems(): LiveData<List<TranslationItem>>
 
     @Query("SELECT * FROM translationItems WHERE language = 'A'")
     fun getLanguageAMessages(): LiveData<TranslationItem>
