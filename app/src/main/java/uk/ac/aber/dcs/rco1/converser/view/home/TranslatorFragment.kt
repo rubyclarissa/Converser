@@ -37,7 +37,7 @@ import kotlin.collections.ArrayList
  * TODO
  *
  */
-class TranslatorFragment : Fragment(){
+class TranslatorFragment : Fragment() {
 
     private lateinit var homeFragmentBinding: FragmentTranslatorBinding
 
@@ -55,8 +55,9 @@ class TranslatorFragment : Fragment(){
 
     //adapter for the conversation recycler view
     private lateinit var conversationAdapter: ConversationAdapter
+
     //list of translations in a conversation
-    private lateinit var translationItemList : ArrayList<TranslationItem>
+    private lateinit var translationItemList: ArrayList<TranslationItem>
 
     private var sourceLanguage: String = ""
     private var targetLanguage: String = ""
@@ -83,10 +84,10 @@ class TranslatorFragment : Fragment(){
     //private val supportFragmentManager = parentFragmentManager
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-   private var oldConversationData: LiveData<List<TranslationItem>>? = null
+
+    private var oldConversationData: LiveData<List<TranslationItem>>? = null
 
     //uses proprety delegate from fragment ktx artefact instead of making an object
-    // TODO: research
     val translatorViewModel: TranslatorViewModel by viewModels()
 
     /**
@@ -105,45 +106,17 @@ class TranslatorFragment : Fragment(){
         // Inflate the layout for this fragment
         homeFragmentBinding = FragmentTranslatorBinding.inflate(inflater, container, false)
 
-        //set up positionInConversation selection spinners
-        setupSpinners()
+        translationItemList = ArrayList()
 
+        //set up language selection spinners
+        setupSpinners()
         //get the UI elements via the binding mechanism
         getUIElements()
-
         //get speech data and put into the edit text box
         displaySpeechToText()
+        setUpConversationRecyclerAdapter()
+        setUpTranslatorViewModel()
 
-        //find and configure conversation recycler view
-        translationItemList = ArrayList()
-        conversationAdapter = ConversationAdapter(requireContext())
-        translationItemRecyclerView.adapter = conversationAdapter
-
-
-        //val conversation = homeFragmentBinding.conversationRecyclerView
-        val conversationLayoutManager = LinearLayoutManager(context)
-        //conversationLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        translationItemRecyclerView.layoutManager = conversationLayoutManager
-
-        ///////
-        //viewmodel set up
-        //ask view model for list of translator items
-        val translationItems = translatorViewModel.translationItems
-
-        //if it returns a new list object then remove observers associated with old one
-        if (oldConversationData != translationItems){
-            oldConversationData?.removeObservers(viewLifecycleOwner)
-            oldConversationData = translationItems
-        }
-        if (!translationItems.hasObservers()){
-            //viewLifecycleOwner instead of 'this' - inherited from superclass (only want to observe
-            //items if there is a UI. could say 'this' but at some points the fragment want have UI
-            //components e.g. before its built / after destroyed - will get exception thrown. viewlco
-            //will only trigger observer if there is an UI - will always work
-            translationItems.observe(viewLifecycleOwner){ translations ->
-                conversationAdapter.changeDataSet(translations.toMutableList())
-            }
-        }
 
         stringToTranslate = inputText.text.toString()
 
@@ -155,6 +128,35 @@ class TranslatorFragment : Fragment(){
         repository = ConverserRepository(requireActivity().application)
 
         return homeFragmentBinding.root
+    }
+
+    private fun setUpTranslatorViewModel() {
+        //viewmodel set up
+        //ask view model for list of translator items
+        val translationItems = translatorViewModel.translationItems
+        //if it returns a new list object then remove observers associated with old one
+        if (oldConversationData != translationItems) {
+            oldConversationData?.removeObservers(viewLifecycleOwner)
+            oldConversationData = translationItems
+        }
+        if (!translationItems.hasObservers()) {
+            //viewLifecycleOwner instead of 'this' - inherited from superclass (only want to observe
+            //items if there is a UI. could say 'this' but at some points the fragment want have UI
+            //components e.g. before its built / after destroyed - will get exception thrown. viewlco
+            //will only trigger observer if there is an UI - will always work
+            translationItems.observe(viewLifecycleOwner) { translations ->
+                conversationAdapter.changeDataSet(translations.toMutableList())
+            }
+        }
+    }
+
+    private fun setUpConversationRecyclerAdapter() {
+        //find and configure conversation recycler view
+        conversationAdapter = ConversationAdapter(requireContext())
+        translationItemRecyclerView.adapter = conversationAdapter
+        val conversationLayoutManager = LinearLayoutManager(context)
+        //conversationLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        translationItemRecyclerView.layoutManager = conversationLayoutManager
     }
 
     private fun setListenerForSpeechRecording() {
@@ -185,10 +187,9 @@ class TranslatorFragment : Fragment(){
     // update list of downloaded models
     private fun getDownloadedModels() {
         languageModelManager.getDownloadedModels(TranslateRemoteModel::class.java)
-            .addOnSuccessListener {
-                    models ->
+            .addOnSuccessListener { models ->
                 //TODO: sort alphabetically
-                downloadedModels = models.map { it.language}
+                downloadedModels = models.map { it.language }
             }
     }
 
@@ -203,8 +204,6 @@ class TranslatorFragment : Fragment(){
 
     private fun setListenerForTranslation() {
         translateButton.setOnClickListener {
-            ////////////////////////////////////////////
-
 
             //create translator object with configurations for source and target languages
             val options = TranslatorOptions.Builder()
@@ -216,35 +215,37 @@ class TranslatorFragment : Fragment(){
             translator = Translation.getClient(options)
             lifecycle.addObserver(translator)
 
-            /*//set up conditions for downloading positionInConversation models
+            //set up conditions for downloading positionInConversation models
             val conditions = DownloadConditions.Builder()
                 .requireWifi()
-                .build()*/
-
-            //Toast.makeText(activity, "Downloading language model", Toast.LENGTH_LONG).show()
+                .build()
 
             //if text input is not empty
             if (!isEmpty(inputText.text)) {
 
 
-                //TODO: fix to not do translation until these are downloaded
-               getDownloadedModels()
-                if (!downloadedModels.contains(sourceLanguage)){
-                    Toast.makeText( activity, "Downloading, please wait",
-                        Toast.LENGTH_SHORT).show()
-                    downloadLanguage(sourceLanguageCode)
-                    getDownloadedModels()
-                }
-                if (!downloadedModels.contains(targetLanguage)){
-                    Toast.makeText( activity, "Downloading, please wait",
-                        Toast.LENGTH_SHORT).show()
-                    downloadLanguage(targetLanguageCode)
-                    getDownloadedModels()
-                }
+                /* //TODO: fix to not do translation until these are downloaded
+                 getDownloadedModels()
+                 if (!downloadedModels.contains(sourceLanguage)) {
+                     Toast.makeText(
+                         activity, "Downloading, please wait",
+                         Toast.LENGTH_SHORT
+                     ).show()
+                     downloadLanguage(sourceLanguageCode)
+                     getDownloadedModels()
+                 }
+                 if (!downloadedModels.contains(targetLanguage)) {
+                     Toast.makeText(
+                         activity, "Downloading, please wait",
+                         Toast.LENGTH_SHORT
+                     ).show()
+                     downloadLanguage(targetLanguageCode)
+                     getDownloadedModels()
+                 }*/
 
 
                 //download the language models if they are not already downloaded
-                translator.downloadModelIfNeeded()
+                translator.downloadModelIfNeeded(conditions)
                     .addOnSuccessListener {
                         Log.i("TAG", "Downloaded model successfully")
                         /*Toast.makeText(
@@ -261,55 +262,24 @@ class TranslatorFragment : Fragment(){
                             Toast.LENGTH_SHORT
                         ).show()*/
                     }
-                    //put translation in here as it works if positionInConversation model needs downloading
-                    .continueWith { task ->
+                    //put translation in here as it works if language model needs downloading
+                    //once models are downloaded,
+                    .continueWith { downloads ->
 
-                        if (task.isSuccessful){
+                        if (downloads.isSuccessful) {
 
-                          //  Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
+                            //  Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
                             //translate the input text using the translator model that was just created
                             translator.translate(homeFragmentBinding.textBox.text.toString())
                                 .addOnSuccessListener { translatedText ->
                                     Log.i("TAG", "Translation is " + translatedText as String)
 
                                     //check if positionInConversation A (first item translated) or B
-                                    when {
-                                        conversationAdapter.itemCount == 0 -> {
-                                            languageA = sourceLanguage
-                                            languageB = targetLanguage
-                                            positionInConversation = PositionInConversation.FIRST
-                                        }
-                                        (conversationAdapter.itemCount > 0) && (sourceLanguage == languageA)
-                                                && (targetLanguage == languageB) -> positionInConversation = PositionInConversation.FIRST
-                                        (conversationAdapter.itemCount > 0) && (sourceLanguage == languageB)
-                                                && (targetLanguage == languageA) -> positionInConversation = PositionInConversation.SECOND
-                                        else -> {
-                                            //set new positionInConversation
-                                            languageA = sourceLanguage
-                                            languageB = targetLanguage
-                                            positionInConversation = PositionInConversation.FIRST
-                                            restartConversation()
-                                        }
-                                    }
-
-                                    //add a message to the message list (original and translated)
-                                    val originalTranslationItem = inputText.text.toString()
-                                    val translationItemObject = TranslationItem(0, originalTranslationItem, translatedText, positionInConversation)
-                                    translationItemList.add(translationItemObject)
-                                   // repository.insert(translationItemObject)
-
-                                    //tell the adapter that a message has been added, so it can update the UI
-                                    //TODO: use different mechanism to notify change
-                                   // conversationAdapter.notifyDataSetChanged()
-                                    translatorViewModel.addTranslationItemToConversation(translationItemObject)
-
-
-                                    /////
-
+                                    setPositionInConversation()
+                                    addTranslationItem(translatedText)
                                     //autoscroll to bottom of message list
-                                    translationItemRecyclerView.smoothScrollToPosition(translationItemList.size - 1)
-
-                                    inputText.text.clear()
+                                    scrollToLastTranslationItemAdded()
+                                    clearInput()
 
                                 }
                                 .addOnFailureListener {
@@ -326,12 +296,68 @@ class TranslatorFragment : Fragment(){
         }
     }
 
+    private fun clearInput() {
+        inputText.text.clear()
+    }
 
+    private fun scrollToLastTranslationItemAdded() {
+        translationItemRecyclerView.smoothScrollToPosition(
+            //translationItemList.size - 1
+            conversationAdapter.itemCount
+        )
+    }
 
-/*    fun showDownloadingLanguageModelDialog(){
-        val dialogue = DownloadLanguageModelDialogFragment()
-        dialogue.show(supportFragmentManager, "download")
-    }*/
+    private fun addTranslationItem(translatedText: String?) {
+        //add a message to the message list (original and translated)
+        val originalTranslationItem = inputText.text.toString()
+        val translationItemObject = TranslationItem(
+            0,
+            originalTranslationItem,
+            translatedText,
+            positionInConversation
+        )
+        translationItemList.add(translationItemObject)
+        // repository.insert(translationItemObject)
+
+        //tell the adapter that a message has been added, so it can update the UI
+        //TODO: use different mechanism to notify change
+        // conversationAdapter.notifyDataSetChanged()
+        translatorViewModel.addTranslationItemToConversation(
+            translationItemObject
+        )
+    }
+
+    //set position of translation item in conversation for conversation handling
+    private fun setPositionInConversation() {
+        when {
+            conversationAdapter.itemCount == 0 -> {
+                languageA = sourceLanguage
+                languageB = targetLanguage
+                positionInConversation = PositionInConversation.FIRST
+            }
+            (conversationAdapter.itemCount > 0) && (sourceLanguage == languageA)
+                    && (targetLanguage == languageB) -> {
+
+                positionInConversation =
+                    PositionInConversation.FIRST
+            }
+
+            (conversationAdapter.itemCount > 0) && (sourceLanguage == languageB)
+                    && (targetLanguage == languageA) -> {
+
+                positionInConversation =
+                    PositionInConversation.SECOND
+            }
+            else -> {
+                //set new positionInConversation
+                languageA = sourceLanguage
+                languageB = targetLanguage
+                positionInConversation = PositionInConversation.FIRST
+                restartConversation()
+            }
+        }
+    }
+
 
     /**
      * Sets a listener when the swap button is pressed
@@ -390,60 +416,20 @@ class TranslatorFragment : Fragment(){
      * Set up the source and target positionInConversation spinners using appropriate resources
      *
      */
-    private fun setupSpinners(){
-        setupSpinner(view,
+    private fun setupSpinners() {
+        setupSpinner(
+            view,
             homeFragmentBinding.sourceLanguageSpinner,
-            R.array.sourceLanguages)
+            R.array.sourceLanguages
+        )
 
-        setupSpinner(view,
+        setupSpinner(
+            view,
             homeFragmentBinding.targetLanguageSpinner,
-            R.array.targetLanguages)
+            R.array.targetLanguages
+        )
     }
 
-    /**
-     * Set up an individual spinner to provide a selection of languages
-     *
-     * @param view - the current view
-     * @param spinner - The spinner being set up (source or target positionInConversation lists)
-     * @param arrayResourceId - The array of languages stored as a strings array value
-     */
-    private fun setupSpinner(view: View?, spinner: Spinner, arrayResourceId: Int){
-        //default value first item in string array
-        spinner.setSelection(1)
-
-        //use predefined layout for spinner
-        val adapter =
-            ArrayAdapter.createFromResource(
-                requireContext(),
-                arrayResourceId,
-                android.R.layout.simple_spinner_item
-            )
-
-        //use predefined layout for spinner dropdown list
-        adapter.setDropDownViewResource(
-            android.R.layout.simple_spinner_dropdown_item)
-
-        //assign adapter to spinner
-        spinner.adapter = adapter
-
-
-        //define behaviour when an item is selected
-        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if(spinner == sourceSpinner) {
-                    //get positionInConversation selected in the spinners
-                    sourceLanguage = sourceSpinner.selectedItem.toString()
-                    sourceLanguageCode = setLanguageCode(sourceSpinner)
-                } else if (spinner == targetSpinner){
-                    targetLanguageCode = setLanguageCode(targetSpinner)
-                    targetLanguage = targetSpinner.selectedItem.toString()
-                }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-        }
-    }
 
     /**
      * Set the positionInConversation code for a positionInConversation using the API positionInConversation code retrieval mechanism
@@ -451,8 +437,8 @@ class TranslatorFragment : Fragment(){
      * @param spinner - The source or target positionInConversation spinner where the positionInConversation has been selected
      * @return the positionInConversation code the positionInConversation e.g. en for English
      */
-    private fun setLanguageCode(spinner: Spinner): String{
-        return when (spinner.selectedItem.toString()){
+    private fun setLanguageCode(spinner: Spinner): String {
+        return when (spinner.selectedItem.toString()) {
             "Afrikaans" -> TranslateLanguage.AFRIKAANS
             "Arabic" -> TranslateLanguage.ARABIC
             "Belarusian" -> TranslateLanguage.BELARUSIAN
@@ -547,20 +533,15 @@ class TranslatorFragment : Fragment(){
         return true
     }
 
-    //TODO: fix and remove this as it will delete the DB when device is rotated
+
     override fun onCreate(savedInstanceState: Bundle?) {
         repository = ConverserRepository(requireActivity().application)
         repository.deleteAll()
         super.onCreate(savedInstanceState)
     }
 
-//TODO: fix so that conversation is deleted before closing app instead of in ocreate
-    override fun onDestroy() {
-        restartConversation()
-        super.onDestroy()
-    }
 
-    private fun restartConversation(){
+    private fun restartConversation() {
         translationItemList.clear()
         repository.deleteAll()
         translator.close()
@@ -570,5 +551,64 @@ class TranslatorFragment : Fragment(){
         conversationAdapter.notifyDataSetChanged()
     }
 
+    ////////////////////////////////////////////////////////
+
+    //TODO: fix so that conversation is deleted before closing app instead of in ocreate
+    override fun onDestroy() {
+        restartConversation()
+        super.onDestroy()
+    }
+
+    /**
+     * Set up an individual spinner to provide a selection of languages
+     *
+     * @param view - the current view
+     * @param spinner - The spinner being set up (source or target positionInConversation lists)
+     * @param arrayResourceId - The array of languages stored as a strings array value
+     */
+    private fun setupSpinner(view: View?, spinner: Spinner, arrayResourceId: Int) {
+        //default value first item in string array
+        spinner.setSelection(1)
+
+        //use predefined layout for spinner
+        val adapter =
+            ArrayAdapter.createFromResource(
+                requireContext(),
+                arrayResourceId,
+                android.R.layout.simple_spinner_item
+            )
+
+        //use predefined layout for spinner dropdown list
+        adapter.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item
+        )
+
+        //assign adapter to spinner
+        spinner.adapter = adapter
+
+
+        //define behaviour when an item is selected
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (spinner == sourceSpinner) {
+                    //get positionInConversation selected in the spinners
+                    sourceLanguage = sourceSpinner.selectedItem.toString()
+                    sourceLanguageCode = setLanguageCode(sourceSpinner)
+                } else if (spinner == targetSpinner) {
+                    targetLanguageCode = setLanguageCode(targetSpinner)
+                    targetLanguage = targetSpinner.selectedItem.toString()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+    }
 
 }

@@ -24,7 +24,7 @@ class ConversationAdapter(
     val context: Context,
     //var translationItemList: List<TranslationItem>,
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    lateinit var translationItemList: List<TranslationItem>
+    private lateinit var translationItemList: List<TranslationItem>
     var clickListener: View.OnClickListener? = null
 
     /**
