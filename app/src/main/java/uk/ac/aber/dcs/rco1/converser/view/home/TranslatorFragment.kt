@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -224,7 +225,7 @@ class TranslatorFragment : Fragment() {
             if (!isEmpty(inputText.text)) {
 
 
-                /* //TODO: fix to not do translation until these are downloaded
+                 /*//TODO: fix to not do translation until these are downloaded
                  getDownloadedModels()
                  if (!downloadedModels.contains(sourceLanguage)) {
                      Toast.makeText(
@@ -232,6 +233,7 @@ class TranslatorFragment : Fragment() {
                          Toast.LENGTH_SHORT
                      ).show()
                      downloadLanguage(sourceLanguageCode)
+                     showNoticeDialog()
                      getDownloadedModels()
                  }
                  if (!downloadedModels.contains(targetLanguage)) {
@@ -240,9 +242,13 @@ class TranslatorFragment : Fragment() {
                          Toast.LENGTH_SHORT
                      ).show()
                      downloadLanguage(targetLanguageCode)
+                     showNoticeDialog()
                      getDownloadedModels()
                  }*/
 
+                     //TODO: Fix to only appear if downloading
+                val dialog = DownloadLanguageModelDialogFragment()
+                dialog.show(this.parentFragmentManager, "download dialog")
 
                 //download the language models if they are not already downloaded
                 translator.downloadModelIfNeeded(conditions)
@@ -267,7 +273,7 @@ class TranslatorFragment : Fragment() {
                     .continueWith { downloads ->
 
                         if (downloads.isSuccessful) {
-
+                            dialog.dismiss()
                             //  Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
                             //translate the input text using the translator model that was just created
                             translator.translate(homeFragmentBinding.textBox.text.toString())
@@ -280,7 +286,6 @@ class TranslatorFragment : Fragment() {
                                     //autoscroll to bottom of message list
                                     scrollToLastTranslationItemAdded()
                                     clearInput()
-
                                 }
                                 .addOnFailureListener {
                                     Log.e("TAG", "Translation failed")
@@ -330,6 +335,8 @@ class TranslatorFragment : Fragment() {
     //set position of translation item in conversation for conversation handling
     private fun setPositionInConversation() {
         when {
+            //initial empty conversation - set language of the first item that is translated
+                //to be language 'A' in the coverstaion - speech bubbles
             conversationAdapter.itemCount == 0 -> {
                 languageA = sourceLanguage
                 languageB = targetLanguage
@@ -544,10 +551,10 @@ class TranslatorFragment : Fragment() {
     private fun restartConversation() {
         translationItemList.clear()
         repository.deleteAll()
-        translator.close()
         //TODO: move somewhere else and check if not in downloaded list
         deleteLanguage(sourceLanguage)
         deleteLanguage(targetLanguage)
+        translator.close()
         conversationAdapter.notifyDataSetChanged()
     }
 
@@ -609,6 +616,12 @@ class TranslatorFragment : Fragment() {
             }
 
         }
+    }
+
+    fun showNoticeDialog() {
+        // Create an instance of the dialog fragment and show it
+        val dialog = DownloadLanguageModelDialogFragment()
+       dialog.show(this.parentFragmentManager, "download dialog")
     }
 
 }
