@@ -131,6 +131,7 @@ class TranslatorFragment : Fragment() {
         return homeFragmentBinding.root
     }
 
+
     private fun setUpTranslatorViewModel() {
         //viewmodel set up
         //ask view model for list of translator items
@@ -310,6 +311,7 @@ class TranslatorFragment : Fragment() {
         translationItemRecyclerView.smoothScrollToPosition(
             //translationItemList.size - 1
             conversationAdapter.itemCount
+
         )
     }
 
@@ -570,6 +572,9 @@ class TranslatorFragment : Fragment() {
     //TODO: fix so that conversation is deleted before closing app instead of in ocreate
     override fun onDestroy() {
         restartConversation()
+        //delete database rather than just its contents - does this get recreated upon refresh
+        //or just restart of the app?
+        context?.deleteDatabase("converser_database")
         super.onDestroy()
     }
 
@@ -583,7 +588,6 @@ class TranslatorFragment : Fragment() {
     private fun setupSpinner(view: View?, spinner: Spinner, arrayResourceId: Int) {
         //default value first item in string array
         spinner.setSelection(1)
-
         //use predefined layout for spinner
         val adapter =
             ArrayAdapter.createFromResource(

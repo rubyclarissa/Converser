@@ -31,18 +31,10 @@ abstract class ConverserRoomDatabase: RoomDatabase(){
                             ConverserRoomDatabase::class.java,
                             "converser_database"
                         )
-                            .addCallback(roomDatabaseCallback(context)) //only use to pre-populate DB
                             //TODO: handle migrations if needed
                             .build()
                 }
                 return instance!!
-            }
-        }
-        private fun roomDatabaseCallback(context: Context): Callback {
-            return object: Callback(){
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    super.onCreate(db)
-                }
             }
         }
     }
