@@ -250,6 +250,7 @@ class TranslatorFragment : Fragment() {
                 val dialog = DownloadLanguageModelDialogFragment()
                 dialog.show(this.parentFragmentManager, "download dialog")
 
+
                 //download the language models if they are not already downloaded
                 translator.downloadModelIfNeeded(conditions)
                     .addOnSuccessListener {
@@ -360,6 +361,7 @@ class TranslatorFragment : Fragment() {
                 languageA = sourceLanguage
                 languageB = targetLanguage
                 positionInConversation = PositionInConversation.FIRST
+
                 restartConversation()
             }
         }
@@ -549,6 +551,11 @@ class TranslatorFragment : Fragment() {
 
 
     private fun restartConversation() {
+        //TODO: fix to handle cancel/ok - on click events
+        // also download model after dialog has confirmed the refresh
+        val restartDialog = ConfirmConversationRefreshDialog()
+        restartDialog.show(this.parentFragmentManager, "refresh dialog")
+
         translationItemList.clear()
         repository.deleteAll()
         //TODO: move somewhere else and check if not in downloaded list
