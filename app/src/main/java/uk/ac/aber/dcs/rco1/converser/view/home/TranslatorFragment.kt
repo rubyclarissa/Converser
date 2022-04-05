@@ -312,6 +312,8 @@ class TranslatorFragment : Fragment() {
                                 .addOnFailureListener {
                                     Log.e("TAG", "Translation failed")
                                 }
+                        } else{
+                            dialog.dismiss()
                         }
                     }
 
@@ -593,80 +595,6 @@ class TranslatorFragment : Fragment() {
     }
 
 
-    /*/**
-     * Set the positionInConversation code for a positionInConversation using the API
-     * positionInConversation code retrieval mechanism
-     *
-     * @param spinner - The source or target positionInConversation spinner where the
-     * positionInConversation has been selected
-     * @return the positionInConversation code the positionInConversation e.g. en for English
-     */
-    private fun setLanguageCode(spinner: Spinner): String {
-        return when (spinner.selectedItem.toString()) {
-            "Afrikaans" -> TranslateLanguage.AFRIKAANS
-            "Arabic" -> TranslateLanguage.ARABIC
-            "Belarusian" -> TranslateLanguage.BELARUSIAN
-            "Bulgarian" -> TranslateLanguage.BULGARIAN
-            "Bengali" -> TranslateLanguage.BENGALI
-            "Catalan" -> TranslateLanguage.CATALAN
-            "Czech" -> TranslateLanguage.CZECH
-            "Welsh" -> TranslateLanguage.WELSH
-            "Danish" -> TranslateLanguage.DANISH
-            "German" -> TranslateLanguage.GERMAN
-            "Greek" -> TranslateLanguage.GREEK
-            "English" -> TranslateLanguage.ENGLISH
-            "Esperanto" -> TranslateLanguage.ESPERANTO
-            "Spanish" -> TranslateLanguage.SPANISH
-            "Estonian" -> TranslateLanguage.ESTONIAN
-            "Persian" -> TranslateLanguage.PERSIAN
-            "Finnish" -> TranslateLanguage.FINNISH
-            "French" -> TranslateLanguage.FRENCH
-            "Irish" -> TranslateLanguage.IRISH
-            "Galician" -> TranslateLanguage.GALICIAN
-            "Gujarati" -> TranslateLanguage.GUJARATI
-            "Hebrew" -> TranslateLanguage.HEBREW
-            "Hindi" -> TranslateLanguage.HINDI
-            "Croatian" -> TranslateLanguage.CROATIAN
-            "Haitian" -> TranslateLanguage.HAITIAN_CREOLE
-            "Hungarian" -> TranslateLanguage.HUNGARIAN
-            "Indonesian" -> TranslateLanguage.INDONESIAN
-            "Icelandic" -> TranslateLanguage.ICELANDIC
-            "Italian" -> TranslateLanguage.ITALIAN
-            "Japanese" -> TranslateLanguage.JAPANESE
-            "Georgian" -> TranslateLanguage.GEORGIAN
-            "Kannada" -> TranslateLanguage.KANNADA
-            "Korean" -> TranslateLanguage.KOREAN
-            "Lithuanian" -> TranslateLanguage.LITHUANIAN
-            "Latvian" -> TranslateLanguage.LATVIAN
-            "Macedonian" -> TranslateLanguage.MACEDONIAN
-            "Marathi" -> TranslateLanguage.MARATHI
-            "Malay" -> TranslateLanguage.MALAY
-            "Maltese" -> TranslateLanguage.MALTESE
-            "Dutch" -> TranslateLanguage.DUTCH
-            "Norwegian" -> TranslateLanguage.NORWEGIAN
-            "Polish" -> TranslateLanguage.POLISH
-            "Portuguese" -> TranslateLanguage.PORTUGUESE
-            "Romanian" -> TranslateLanguage.ROMANIAN
-            "Russian" -> TranslateLanguage.RUSSIAN
-            "Slovak" -> TranslateLanguage.SLOVAK
-            "Slovenian" -> TranslateLanguage.SLOVENIAN
-            "Albanian" -> TranslateLanguage.ALBANIAN
-            "Swedish" -> TranslateLanguage.SWEDISH
-            "Swahili" -> TranslateLanguage.SWAHILI
-            "Tamil" -> TranslateLanguage.TAMIL
-            "Telugu" -> TranslateLanguage.TELUGU
-            "Thai" -> TranslateLanguage.THAI
-            "Tagalog" -> TranslateLanguage.TAGALOG
-            "Turkish" -> TranslateLanguage.TURKISH
-            "Ukrainian" -> TranslateLanguage.UKRAINIAN
-            "Urdu" -> TranslateLanguage.URDU
-            "Vietnamese" -> TranslateLanguage.VIETNAMESE
-            "Chinese" -> TranslateLanguage.CHINESE
-            //default to english
-            else -> TranslateLanguage.ENGLISH
-        }
-    }*/
-
     /**
      * Use speech recognizer intent mechanism to get speech input from the user
      * An alternative would be to use Speech Recognizer
@@ -706,24 +634,19 @@ class TranslatorFragment : Fragment() {
 
 
     private fun restartConversation() {
-        val restartDialog = ConfirmConversationRefreshDialog()
-        restartDialog.show(this.parentFragmentManager, "refresh dialog")
-
+        /*val restartDialog = ConfirmConversationRefreshDialog()
+        restartDialog.show(this.parentFragmentManager, "refresh dialog")*/
+        //TODO: fix to changes languages when new ones selected instead of rhis
+        setInitialButtonLanguages()
         translationItemList.clear()
         repository.deleteAll()
         //TODO: move somewhere else and check if not in downloaded list
-        deleteLanguage(sourceLanguage)
-        deleteLanguage(targetLanguage)
+       // deleteLanguage(sourceLanguage)
+       // deleteLanguage(targetLanguage)
         translator.close()
         conversationAdapter.notifyDataSetChanged()
     }
 
-    private fun confirmRestartConversation(){
-        //TODO: fix to handle cancel/ok - on click events
-        // also download model after dialog has confirmed the refresh
-        val restartDialog = ConfirmConversationRefreshDialog()
-        restartDialog.show(this.parentFragmentManager, "refresh dialog")
-    }
 
     ////////////////////////////////////////////////////////
 
