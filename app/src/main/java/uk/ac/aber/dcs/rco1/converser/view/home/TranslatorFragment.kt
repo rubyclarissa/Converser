@@ -96,8 +96,6 @@ class TranslatorFragment : Fragment() {
     //uses proprety delegate from fragment ktx artefact instead of making an object
     val translatorViewModel: TranslatorViewModel by viewModels()
 
-    private val dialog = DownloadLanguageModelDialogFragment()
-
     /**
      * TODO
      *
@@ -240,13 +238,13 @@ class TranslatorFragment : Fragment() {
             if (!isEmpty(inputText.text)) {
 
 
-                //TODO: fix to not do translation until these are downloaded
+                /*//TODO: fix to not do translation until these are downloaded
                 getDownloadedModels()
                 if (!downloadedModels.contains(sourceLanguage)) {
-                   /* Toast.makeText(
+                   *//* Toast.makeText(
                         activity, "Downloading, please wait",
                         Toast.LENGTH_SHORT
-                    ).show()*/
+                    ).show()*//*
                     //TODO: Fix to only appear if downloading
                     dialog.show(this.parentFragmentManager, "download dialog")
 
@@ -256,10 +254,10 @@ class TranslatorFragment : Fragment() {
                     dialog.dismiss()
                 }
                 if (!downloadedModels.contains(targetLanguage)) {
-                    /*Toast.makeText(
+                    *//*Toast.makeText(
                         activity, "Downloading, please wait",
                         Toast.LENGTH_SHORT
-                    ).show()*/
+                    ).show()*//*
                     //TODO: Fix to only appear if downloading
                     dialog.show(this.parentFragmentManager, "download dialog")
 
@@ -267,8 +265,10 @@ class TranslatorFragment : Fragment() {
                     //showNoticeDialog()
                     getDownloadedModels()
                     dialog.dismiss()
-                }
+                }*/
 
+                val dialog = DownloadLanguageModelDialogFragment()
+                dialog.show(this.parentFragmentManager, "download dialog")
                 //download the language models if they are not already downloaded
                 translator.downloadModelIfNeeded(conditions)
                     .addOnSuccessListener {
@@ -292,6 +292,8 @@ class TranslatorFragment : Fragment() {
                     .continueWith { downloads ->
 
                         if (downloads.isSuccessful) {
+                            dialog.dismiss()
+
                             if (translationItemRecyclerView.isEmpty()){
                                 Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
                             }
@@ -704,8 +706,6 @@ class TranslatorFragment : Fragment() {
 
 
     private fun restartConversation() {
-        //TODO: fix to handle cancel/ok - on click events
-        // also download model after dialog has confirmed the refresh
         val restartDialog = ConfirmConversationRefreshDialog()
         restartDialog.show(this.parentFragmentManager, "refresh dialog")
 
@@ -716,6 +716,13 @@ class TranslatorFragment : Fragment() {
         deleteLanguage(targetLanguage)
         translator.close()
         conversationAdapter.notifyDataSetChanged()
+    }
+
+    private fun confirmRestartConversation(){
+        //TODO: fix to handle cancel/ok - on click events
+        // also download model after dialog has confirmed the refresh
+        val restartDialog = ConfirmConversationRefreshDialog()
+        restartDialog.show(this.parentFragmentManager, "refresh dialog")
     }
 
     ////////////////////////////////////////////////////////
