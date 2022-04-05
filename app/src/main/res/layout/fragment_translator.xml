@@ -150,6 +150,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/quickLanguageSelections"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -160,23 +161,24 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/leftButton"
+            android:id="@+id/leftLanguageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/left_button_background"
-            android:text=""
+            app:backgroundTint="@color/active_button"
+            android:text="English"
             android:paddingEnd="50dp"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
-            android:id="@+id/rightButton"
+            android:id="@+id/rightLanguageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:paddingStart="40dp"
+            app:backgroundTint="@color/unactive_button"
+            android:text="English"
+            android:paddingStart="50dp"
             android:background="@drawable/right_button_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </LinearLayout>
 

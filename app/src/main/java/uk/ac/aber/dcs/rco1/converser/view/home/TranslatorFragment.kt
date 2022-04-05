@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -53,6 +54,8 @@ class TranslatorFragment : Fragment() {
     private lateinit var inputText: EditText
     private lateinit var sourceSpinner: Spinner
     private lateinit var targetSpinner: Spinner
+    private lateinit var leftLanguageButton: Button
+    private lateinit var rightLanguageButton: Button
 
     //adapter for the conversation recycler view
     private lateinit var conversationAdapter: ConversationAdapter
@@ -125,6 +128,7 @@ class TranslatorFragment : Fragment() {
         setListenerForLanguageSwap()
         setListenerForTranslation()
         setListenerForSpeechRecording()
+        setListenerForActiveLanguageButton()
 
         repository = ConverserRepository(requireActivity().application)
 
@@ -390,6 +394,38 @@ class TranslatorFragment : Fragment() {
         }
     }
 
+    private fun setListenerForActiveLanguageButton(){
+        leftLanguageButton.setOnClickListener {
+            //set background colour of left button to active
+            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
+            R.color.active_button)
+
+            //set background colour of left button to inactive
+            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
+            R.color.unactive_button)
+
+            //do simmilar to swap button
+        }
+
+        rightLanguageButton.setOnClickListener {
+            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
+                R.color.unactive_button)
+
+            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
+                R.color.active_button)
+
+            //do simmilar to swap button
+        }
+    }
+
+    private fun setInitialButtonLanguages(){
+        leftLanguageButton.text = sourceLanguage
+        rightLanguageButton.text = targetLanguage
+    }
+
+
+
+
     /**
      * Uses Intent mechanism to update the input text field with speech data when it is provided
      *
@@ -421,6 +457,8 @@ class TranslatorFragment : Fragment() {
         sourceSpinner = homeFragmentBinding.sourceLanguageSpinner
         targetSpinner = homeFragmentBinding.targetLanguageSpinner
         swapButton = homeFragmentBinding.swapLanguages
+        leftLanguageButton = homeFragmentBinding.leftLanguageButton
+        rightLanguageButton = homeFragmentBinding.rightLanguageButton
     }
 
     /**
@@ -443,11 +481,13 @@ class TranslatorFragment : Fragment() {
 
 
     /**
-     * Set the positionInConversation code for a positionInConversation using the API positionInConversation code retrieval mechanism
+     * Set the positionInConversation code for a positionInConversation using the API
+     * positionInConversation code retrieval mechanism
      *
-     * @param spinner - The source or target positionInConversation spinner where the positionInConversation has been selected
+     * @param spinner - The source or target positionInConversation spinner where the
+     * positionInConversation has been selected
      * @return the positionInConversation code the positionInConversation e.g. en for English
-     */
+     *//*
     private fun setLanguageCode(spinner: Spinner): String {
         return when (spinner.selectedItem.toString()) {
             "Afrikaans" -> TranslateLanguage.AFRIKAANS
@@ -512,7 +552,7 @@ class TranslatorFragment : Fragment() {
             //default to english
             else -> TranslateLanguage.ENGLISH
         }
-    }
+    }*/
 
     /**
      * Use speech recognizer intent mechanism to get speech input from the user
@@ -565,6 +605,8 @@ class TranslatorFragment : Fragment() {
         deleteLanguage(targetLanguage)
         translator.close()
         conversationAdapter.notifyDataSetChanged()
+
+        setInitialButtonLanguages()
     }
 
     ////////////////////////////////////////////////////////
@@ -613,20 +655,26 @@ class TranslatorFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                if (spinner == sourceSpinner) {
-                    //get positionInConversation selected in the spinners
-                    sourceLanguage = sourceSpinner.selectedItem.toString()
-                    sourceLanguageCode = setLanguageCode(sourceSpinner)
-                } else if (spinner == targetSpinner) {
-                    targetLanguageCode = setLanguageCode(targetSpinner)
-                    targetLanguage = targetSpinner.selectedItem.toString()
-                }
+                setLanguageFromSpinnerSelection(spinner)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
         }
+    }
+
+
+    private fun setLanguageFromSpinnerSelection(spinner: Spinner) {
+        if (spinner == sourceSpinner) {
+            //get language selected in the spinners
+            sourceLanguage = sourceSpinner.selectedItem.toString()
+            sourceLanguageCode = translatorViewModel.setLanguageCode(sourceSpinner)
+        } else if (spinner == targetSpinner) {
+            targetLanguageCode = translatorViewModel.setLanguageCode(targetSpinner)
+            targetLanguage = targetSpinner.selectedItem.toString()
+        }
+        setInitialButtonLanguages()
     }
 
     fun showNoticeDialog() {
