@@ -1,6 +1,10 @@
 package uk.ac.aber.dcs.rco1.converser.viewModel
 
 import android.app.Application
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.speech.RecognizerIntent
+import android.view.View
 import android.widget.Spinner
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -14,10 +18,11 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 class TranslatorViewModel(application: Application) :
     AndroidViewModel(application) {
 
-    private val _sourceText = MutableLiveData<String>()
+    /*private val _sourceText = MutableLiveData<String>()
 
     val sourceText: LiveData<String>
-        get() = _sourceText
+        get() = _sourceText*/
+
 
     private val repository: ConverserRepository = ConverserRepository(application)
     var translationItems: LiveData<List<TranslationItem>> = getAllTranslationItems()
@@ -110,8 +115,6 @@ class TranslatorViewModel(application: Application) :
             else -> TranslateLanguage.ENGLISH
         }
     }
-
-
 
 
 }

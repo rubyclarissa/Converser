@@ -17,7 +17,9 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentTransaction
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -94,6 +96,8 @@ class TranslatorFragment : Fragment() {
     //uses proprety delegate from fragment ktx artefact instead of making an object
     val translatorViewModel: TranslatorViewModel by viewModels()
 
+    private val dialog = DownloadLanguageModelDialogFragment()
+
     /**
      * TODO
      *
@@ -117,10 +121,13 @@ class TranslatorFragment : Fragment() {
         //get the UI elements via the binding mechanism
         getUIElements()
         //get speech data and put into the edit text box
-        displaySpeechToText()
+        captureSpeechData()
         setUpConversationRecyclerAdapter()
         setUpTranslatorViewModel()
 
+        if (translationItemRecyclerView.isEmpty()){
+            homeFragmentBinding.quickLanguageSelections.isVisible = false
+        }
 
         stringToTranslate = inputText.text.toString()
 
@@ -128,7 +135,7 @@ class TranslatorFragment : Fragment() {
         setListenerForLanguageSwap()
         setListenerForTranslation()
         setListenerForSpeechRecording()
-        setListenerForActiveLanguageButton()
+        setListenerForInitialActiveLanguageButton()
 
         repository = ConverserRepository(requireActivity().application)
 
@@ -211,6 +218,9 @@ class TranslatorFragment : Fragment() {
     private fun setListenerForTranslation() {
         translateButton.setOnClickListener {
 
+            if (!homeFragmentBinding.quickLanguageSelections.isVisible){
+                    homeFragmentBinding.quickLanguageSelections.isVisible = true
+            }
             //create translator object with configurations for source and target languages
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(sourceLanguageCode)
@@ -230,31 +240,34 @@ class TranslatorFragment : Fragment() {
             if (!isEmpty(inputText.text)) {
 
 
-                 /*//TODO: fix to not do translation until these are downloaded
-                 getDownloadedModels()
-                 if (!downloadedModels.contains(sourceLanguage)) {
-                     Toast.makeText(
-                         activity, "Downloading, please wait",
-                         Toast.LENGTH_SHORT
-                     ).show()
-                     downloadLanguage(sourceLanguageCode)
-                     showNoticeDialog()
-                     getDownloadedModels()
-                 }
-                 if (!downloadedModels.contains(targetLanguage)) {
-                     Toast.makeText(
-                         activity, "Downloading, please wait",
-                         Toast.LENGTH_SHORT
-                     ).show()
-                     downloadLanguage(targetLanguageCode)
-                     showNoticeDialog()
-                     getDownloadedModels()
-                 }*/
+                //TODO: fix to not do translation until these are downloaded
+                getDownloadedModels()
+                if (!downloadedModels.contains(sourceLanguage)) {
+                   /* Toast.makeText(
+                        activity, "Downloading, please wait",
+                        Toast.LENGTH_SHORT
+                    ).show()*/
+                    //TODO: Fix to only appear if downloading
+                    dialog.show(this.parentFragmentManager, "download dialog")
 
-                     //TODO: Fix to only appear if downloading
-                val dialog = DownloadLanguageModelDialogFragment()
-                dialog.show(this.parentFragmentManager, "download dialog")
+                    downloadLanguage(sourceLanguageCode)
+                    //showNoticeDialog()
+                    getDownloadedModels()
+                    dialog.dismiss()
+                }
+                if (!downloadedModels.contains(targetLanguage)) {
+                    /*Toast.makeText(
+                        activity, "Downloading, please wait",
+                        Toast.LENGTH_SHORT
+                    ).show()*/
+                    //TODO: Fix to only appear if downloading
+                    dialog.show(this.parentFragmentManager, "download dialog")
 
+                    downloadLanguage(targetLanguageCode)
+                    //showNoticeDialog()
+                    getDownloadedModels()
+                    dialog.dismiss()
+                }
 
                 //download the language models if they are not already downloaded
                 translator.downloadModelIfNeeded(conditions)
@@ -279,8 +292,9 @@ class TranslatorFragment : Fragment() {
                     .continueWith { downloads ->
 
                         if (downloads.isSuccessful) {
-                            dialog.dismiss()
-                            //  Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
+                            if (translationItemRecyclerView.isEmpty()){
+                                Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
+                            }
                             //translate the input text using the translator model that was just created
                             translator.translate(homeFragmentBinding.textBox.text.toString())
                                 .addOnSuccessListener { translatedText ->
@@ -343,7 +357,7 @@ class TranslatorFragment : Fragment() {
     private fun setPositionInConversation() {
         when {
             //initial empty conversation - set language of the first item that is translated
-                //to be language 'A' in the coverstaion - speech bubbles
+            //to be language 'A' in the coverstaion - speech bubbles
             conversationAdapter.itemCount == 0 -> {
                 languageA = sourceLanguage
                 languageB = targetLanguage
@@ -381,9 +395,9 @@ class TranslatorFragment : Fragment() {
     private fun setListenerForLanguageSwap() {
         swapButton.setOnClickListener {
             //swap text in spinners
-            //get source positionInConversation and put in temp target
+            //get source language and put in temp target
             val tempTargetLanguage = sourceSpinner.selectedItemPosition
-            //get target positionInConversation and put in source
+            //get target language and put in source
             sourceSpinner.setSelection(targetSpinner.selectedItemPosition)
             //put temp target in target
             targetSpinner.setSelection(tempTargetLanguage)
@@ -391,58 +405,155 @@ class TranslatorFragment : Fragment() {
             sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
             targetLanguage = targetSpinner.selectedItem.toString().uppercase()
 
+            if  (translationItemRecyclerView.isNotEmpty()){
+                swapButtonBackgroundColor(leftLanguageButton, rightLanguageButton)
+            }
+
         }
     }
 
-    private fun setListenerForActiveLanguageButton(){
+    private fun swapButtonBackgroundColor(buttonA: Button, buttonB: Button){
+        if (buttonA.backgroundTintList == ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.active_button)){
+            buttonA.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.unactive_button)
+            buttonB.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.active_button)
+        }
+       else {
+            buttonA.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.active_button)
+            buttonB.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.unactive_button)
+        }
+    }
+
+    //when conversation is empty
+    private fun setListenerForInitialActiveLanguageButton() {
         leftLanguageButton.setOnClickListener {
             //set background colour of left button to active
-            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
-            R.color.active_button)
+            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.active_button
+            )
 
             //set background colour of left button to inactive
-            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
-            R.color.unactive_button)
+            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.unactive_button
+            )
+
+            //do simmilar to swap button
+            //swap text in spinners
+            //get source language and put in temp target
+            val tempTargetLanguage = sourceSpinner.selectedItemPosition
+            //get target language and put in source
+            sourceSpinner.setSelection(targetSpinner.selectedItemPosition)
+            //put temp target in target
+            targetSpinner.setSelection(tempTargetLanguage)
+
+            sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
+            targetLanguage = targetSpinner.selectedItem.toString().uppercase()
+        }
+
+        rightLanguageButton.setOnClickListener {
+            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.unactive_button
+            )
+
+            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.active_button
+            )
+
+            //do simmilar to swap button
+            //swap text in spinners
+            //get source language and put in temp target
+            val tempTargetLanguage = sourceSpinner.selectedItemPosition
+            //get target language and put in source
+            sourceSpinner.setSelection(targetSpinner.selectedItemPosition)
+            //put temp target in target
+            targetSpinner.setSelection(tempTargetLanguage)
+
+            sourceLanguage = sourceSpinner.selectedItem.toString().uppercase()
+            targetLanguage = targetSpinner.selectedItem.toString().uppercase()
+        }
+    }
+
+    //when conversation is empty
+    private fun setInitialButtonLanguages() {
+        leftLanguageButton.text = sourceSpinner.selectedItem.toString()
+        rightLanguageButton.text = targetSpinner.selectedItem.toString()
+    }
+
+    //when conversation has begun
+    private fun setActiveConversationButtonLanguages(){
+
+    }
+
+    //when conversation has begun
+    private fun setListenerForActiveLanguageButton() {
+        leftLanguageButton.setOnClickListener {
+            //set background colour of left button to active
+            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.active_button
+            )
+
+            //set background colour of left button to inactive
+            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.unactive_button
+            )
 
             //do simmilar to swap button
         }
 
         rightLanguageButton.setOnClickListener {
-            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
-                R.color.unactive_button)
+            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.unactive_button
+            )
 
-            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
-                R.color.active_button)
+            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.active_button
+            )
 
             //do simmilar to swap button
         }
     }
-
-    private fun setInitialButtonLanguages(){
-        leftLanguageButton.text = sourceLanguage
-        rightLanguageButton.text = targetLanguage
-    }
-
-
 
 
     /**
      * Uses Intent mechanism to update the input text field with speech data when it is provided
      *
      */
-    private fun displaySpeechToText() {
+    private fun captureSpeechData(){
+        lateinit var speechData: ArrayList<Editable>
         activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult? ->
             //if data is available, display data in edit text view
             if (result!!.resultCode == Activity.RESULT_OK && result.data != null) {
-                val speechData =
+                speechData =
                     result.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                             //TODO: check the cast or use alternative mechanism
                             as ArrayList<Editable>
-                inputText.text = speechData[0]
+               // inputText.text = speechData[0]
+                putTextDataInTextBox(speechData)
             }
         }
+    }
+
+    private fun putTextDataInTextBox(speechData: ArrayList<Editable>){
+        inputText.text = speechData[0]
     }
 
     /**
@@ -480,14 +591,14 @@ class TranslatorFragment : Fragment() {
     }
 
 
-    /**
+    /*/**
      * Set the positionInConversation code for a positionInConversation using the API
      * positionInConversation code retrieval mechanism
      *
      * @param spinner - The source or target positionInConversation spinner where the
      * positionInConversation has been selected
      * @return the positionInConversation code the positionInConversation e.g. en for English
-     *//*
+     */
     private fun setLanguageCode(spinner: Spinner): String {
         return when (spinner.selectedItem.toString()) {
             "Afrikaans" -> TranslateLanguage.AFRIKAANS
@@ -605,8 +716,6 @@ class TranslatorFragment : Fragment() {
         deleteLanguage(targetLanguage)
         translator.close()
         conversationAdapter.notifyDataSetChanged()
-
-        setInitialButtonLanguages()
     }
 
     ////////////////////////////////////////////////////////
@@ -633,8 +742,7 @@ class TranslatorFragment : Fragment() {
         //use predefined layout for spinner
         val adapter =
             ArrayAdapter.createFromResource(
-                requireContext(),
-                arrayResourceId,
+                requireContext(), arrayResourceId,
                 android.R.layout.simple_spinner_item
             )
 
@@ -645,7 +753,6 @@ class TranslatorFragment : Fragment() {
 
         //assign adapter to spinner
         spinner.adapter = adapter
-
 
         //define behaviour when an item is selected
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -674,13 +781,15 @@ class TranslatorFragment : Fragment() {
             targetLanguageCode = translatorViewModel.setLanguageCode(targetSpinner)
             targetLanguage = targetSpinner.selectedItem.toString()
         }
-        setInitialButtonLanguages()
+        if (translationItemRecyclerView.isEmpty()){
+            setInitialButtonLanguages()
+        }
     }
 
     fun showNoticeDialog() {
         // Create an instance of the dialog fragment and show it
         val dialog = DownloadLanguageModelDialogFragment()
-       dialog.show(this.parentFragmentManager, "download dialog")
+        dialog.show(this.parentFragmentManager, "download dialog")
     }
 
 }
