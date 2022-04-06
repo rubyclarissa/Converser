@@ -268,7 +268,14 @@ class TranslatorFragment : Fragment() {
                 }*/
 
                 val dialog = DownloadLanguageModelDialogFragment()
-                dialog.show(this.parentFragmentManager, "download dialog")
+                //show dialog to download if translating first item
+                if (translationItemRecyclerView.isNotEmpty()){
+                    if  ((sourceLanguage != languageA || targetLanguage != languageA)
+                        || (sourceLanguage!= languageB || targetLanguage!= languageB)){
+                        dialog.show(this.parentFragmentManager, "download dialog")
+                    }
+                }
+
                 //download the language models if they are not already downloaded
                 translator.downloadModelIfNeeded(conditions)
                     .addOnSuccessListener {
@@ -292,7 +299,13 @@ class TranslatorFragment : Fragment() {
                     .continueWith { downloads ->
 
                         if (downloads.isSuccessful) {
-                            dialog.dismiss()
+
+                            if (translationItemRecyclerView.isNotEmpty()) {
+                                if ((sourceLanguage != languageA || targetLanguage != languageA)
+                                        || (sourceLanguage!= languageB || targetLanguage!= languageB)) {
+                                    dialog.dismiss()
+                                }
+                            }
 
                             if (translationItemRecyclerView.isEmpty()){
                                 Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
@@ -330,11 +343,17 @@ class TranslatorFragment : Fragment() {
     }
 
     private fun scrollToLastTranslationItemAdded() {
-        translationItemRecyclerView.smoothScrollToPosition(
-            //translationItemList.size - 1
-            conversationAdapter.itemCount
+        if (translationItemRecyclerView.isEmpty()){
+            translationItemRecyclerView.smoothScrollToPosition(
+                translationItemList.size - 1
+                //conversationAdapter.itemCount
+            )
+        } else{
+            translationItemRecyclerView.smoothScrollToPosition(
+                //translationItemList.size - 1
+                translationItemList.size -1)
+        }
 
-        )
     }
 
     private fun addTranslationItem(translatedText: String?) {
@@ -491,9 +510,15 @@ class TranslatorFragment : Fragment() {
     }
 
     //when conversation is empty
+    //fix to switch language in button before item is translated after selecting new language(s)
     private fun setInitialButtonLanguages() {
-        leftLanguageButton.text = sourceSpinner.selectedItem.toString()
-        rightLanguageButton.text = targetSpinner.selectedItem.toString()
+        if  (translationItemRecyclerView.isEmpty()) {
+            leftLanguageButton.text = sourceSpinner.selectedItem.toString()
+            rightLanguageButton.text = targetSpinner.selectedItem.toString()
+        } else{
+            leftLanguageButton.text = languageA
+            rightLanguageButton.text = languageB
+        }
     }
 
     //when conversation has begun
@@ -711,9 +736,9 @@ class TranslatorFragment : Fragment() {
             targetLanguageCode = translatorViewModel.setLanguageCode(targetSpinner)
             targetLanguage = targetSpinner.selectedItem.toString()
         }
-        if (translationItemRecyclerView.isEmpty()){
+        //if (translationItemRecyclerView.isEmpty()){
             setInitialButtonLanguages()
-        }
+        //}
     }
 
     fun showNoticeDialog() {
