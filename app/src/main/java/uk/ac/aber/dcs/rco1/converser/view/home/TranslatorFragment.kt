@@ -188,11 +188,17 @@ class TranslatorFragment : Fragment() {
 
     // download a positionInConversation model
     private fun downloadLanguage(languageCode: String) {
+        val dialog = DownloadLanguageModelDialogFragment()
+        dialog.show(this.parentFragmentManager, "download dialog")
+
         val model = getLanguageModel(languageCode)
         val conditions = DownloadConditions.Builder()
             .requireWifi()
             .build()
-        languageModelManager.download(model, conditions)
+        languageModelManager.download(model, conditions).addOnCompleteListener {
+            dialog.dismiss()
+        }
+        getDownloadedModels()
     }
 
     // update list of downloaded models
@@ -209,7 +215,7 @@ class TranslatorFragment : Fragment() {
         val model = getLanguageModel(languageCode)
         languageModelManager.deleteDownloadedModel(model)
             .addOnCompleteListener {
-                //getDownloadedModels()
+                getDownloadedModels()
             }
     }
 
@@ -237,43 +243,43 @@ class TranslatorFragment : Fragment() {
             //if text input is not empty
             if (!isEmpty(inputText.text)) {
 
+               // val dialog = DownloadLanguageModelDialogFragment()
 
-                /*//TODO: fix to not do translation until these are downloaded
+                //TODO: fix to not do translation until these are downloaded
                 getDownloadedModels()
-                if (!downloadedModels.contains(sourceLanguage)) {
-                   *//* Toast.makeText(
+                if (!downloadedModels.contains(sourceLanguageCode)) {
+                    Log.i("TAG", "Downloaded models:" + downloadedModels)
+                   /* Toast.makeText(
                         activity, "Downloading, please wait",
                         Toast.LENGTH_SHORT
-                    ).show()*//*
+                    ).show()*/
                     //TODO: Fix to only appear if downloading
-                    dialog.show(this.parentFragmentManager, "download dialog")
+                   // dialog.show(this.parentFragmentManager, "download dialog")
 
                     downloadLanguage(sourceLanguageCode)
                     //showNoticeDialog()
                     getDownloadedModels()
-                    dialog.dismiss()
+                  //  dialog.dismiss()
                 }
-                if (!downloadedModels.contains(targetLanguage)) {
-                    *//*Toast.makeText(
+                if (!downloadedModels.contains(targetLanguageCode)) {
+                    Log.i("TAG", "Downloaded models:" + downloadedModels)
+                    /*Toast.makeText(
                         activity, "Downloading, please wait",
                         Toast.LENGTH_SHORT
-                    ).show()*//*
+                    ).show()*/
                     //TODO: Fix to only appear if downloading
-                    dialog.show(this.parentFragmentManager, "download dialog")
+                   // dialog.show(this.parentFragmentManager, "download dialog")
 
                     downloadLanguage(targetLanguageCode)
                     //showNoticeDialog()
                     getDownloadedModels()
-                    dialog.dismiss()
-                }*/
+                  //  dialog.dismiss()
+                }
 
-                val dialog = DownloadLanguageModelDialogFragment()
                 //show dialog to download if translating first item
-                if (translationItemRecyclerView.isNotEmpty()){
-                    if  ((sourceLanguage != languageA || targetLanguage != languageA)
-                        || (sourceLanguage!= languageB || targetLanguage!= languageB)){
-                        dialog.show(this.parentFragmentManager, "download dialog")
-                    }
+                if (translationItemList.size == 0){
+                     //   dialog.show(this.parentFragmentManager, "download dialog")
+
                 }
 
                 //download the language models if they are not already downloaded
@@ -300,14 +306,11 @@ class TranslatorFragment : Fragment() {
 
                         if (downloads.isSuccessful) {
 
-                            if (translationItemRecyclerView.isNotEmpty()) {
-                                if ((sourceLanguage != languageA || targetLanguage != languageA)
-                                        || (sourceLanguage!= languageB || targetLanguage!= languageB)) {
-                                    dialog.dismiss()
-                                }
+                            if (translationItemList.size == 0) {
+                                 //   dialog.dismiss()
                             }
 
-                            if (translationItemRecyclerView.isEmpty()){
+                            if (translationItemList.size == 0){
                                 Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
                             }
                             //translate the input text using the translator model that was just created
@@ -326,7 +329,7 @@ class TranslatorFragment : Fragment() {
                                     Log.e("TAG", "Translation failed")
                                 }
                         } else{
-                            dialog.dismiss()
+                          //  dialog.dismiss()
                         }
                     }
 
@@ -666,8 +669,8 @@ class TranslatorFragment : Fragment() {
         translationItemList.clear()
         repository.deleteAll()
         //TODO: move somewhere else and check if not in downloaded list
-       // deleteLanguage(sourceLanguage)
-       // deleteLanguage(targetLanguage)
+       // deleteLanguage(sourceLanguageCode)
+       // deleteLanguage(targetLanguageCode)
         translator.close()
         conversationAdapter.notifyDataSetChanged()
     }
