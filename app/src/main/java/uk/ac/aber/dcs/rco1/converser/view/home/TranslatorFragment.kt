@@ -219,6 +219,15 @@ class TranslatorFragment : Fragment() {
             }
     }
 
+    private fun downloadModelIfNotOnDevice(languageCode: String){
+        getDownloadedModels()
+        if (!downloadedModels.contains(languageCode)) {
+            Log.i("TAG", "Downloaded models:" + downloadedModels)
+            downloadLanguage(languageCode)
+            getDownloadedModels()
+        }
+    }
+
     private fun setListenerForTranslation() {
         translateButton.setOnClickListener {
 
@@ -243,72 +252,23 @@ class TranslatorFragment : Fragment() {
             //if text input is not empty
             if (!isEmpty(inputText.text)) {
 
-               // val dialog = DownloadLanguageModelDialogFragment()
+                downloadModelIfNotOnDevice(sourceLanguageCode)
+                downloadModelIfNotOnDevice(targetLanguageCode)
 
-                //TODO: fix to not do translation until these are downloaded
-                getDownloadedModels()
-                if (!downloadedModels.contains(sourceLanguageCode)) {
-                    Log.i("TAG", "Downloaded models:" + downloadedModels)
-                   /* Toast.makeText(
-                        activity, "Downloading, please wait",
-                        Toast.LENGTH_SHORT
-                    ).show()*/
-                    //TODO: Fix to only appear if downloading
-                   // dialog.show(this.parentFragmentManager, "download dialog")
-
-                    downloadLanguage(sourceLanguageCode)
-                    //showNoticeDialog()
-                    getDownloadedModels()
-                  //  dialog.dismiss()
-                }
-                if (!downloadedModels.contains(targetLanguageCode)) {
-                    Log.i("TAG", "Downloaded models:" + downloadedModels)
-                    /*Toast.makeText(
-                        activity, "Downloading, please wait",
-                        Toast.LENGTH_SHORT
-                    ).show()*/
-                    //TODO: Fix to only appear if downloading
-                   // dialog.show(this.parentFragmentManager, "download dialog")
-
-                    downloadLanguage(targetLanguageCode)
-                    //showNoticeDialog()
-                    getDownloadedModels()
-                  //  dialog.dismiss()
-                }
-
-                //show dialog to download if translating first item
-                if (translationItemList.size == 0){
-                     //   dialog.show(this.parentFragmentManager, "download dialog")
-
-                }
 
                 //download the language models if they are not already downloaded
                 translator.downloadModelIfNeeded(conditions)
                     .addOnSuccessListener {
                         Log.i("TAG", "Downloaded model successfully")
-                        /*Toast.makeText(
-                            activity,
-                            "Downloaded model successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()*/
                     }
                     .addOnFailureListener {
                         Log.e("TAG", "Model could not be downloaded")
-                        /*Toast.makeText(
-                            activity,
-                            "DEBUG: Model could not be downloaded",
-                            Toast.LENGTH_SHORT
-                        ).show()*/
                     }
                     //put translation in here as it works if language model needs downloading
                     //once models are downloaded,
                     .continueWith { downloads ->
 
                         if (downloads.isSuccessful) {
-
-                            if (translationItemList.size == 0) {
-                                 //   dialog.dismiss()
-                            }
 
                             if (translationItemList.size == 0){
                                 Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
@@ -328,11 +288,8 @@ class TranslatorFragment : Fragment() {
                                 .addOnFailureListener {
                                     Log.e("TAG", "Translation failed")
                                 }
-                        } else{
-                          //  dialog.dismiss()
                         }
                     }
-
             }
             // no input text to translate
             else {
@@ -585,7 +542,7 @@ class TranslatorFragment : Fragment() {
     }
 
     private fun putTextDataInTextBox(speechData: ArrayList<Editable>){
-        inputText.text = speechData[0]
+        inputText.text = inputText.text.append(speechData[0])
     }
 
     /**
@@ -662,29 +619,35 @@ class TranslatorFragment : Fragment() {
 
 
     private fun restartConversation() {
-        /*val restartDialog = ConfirmConversationRefreshDialog()
-        restartDialog.show(this.parentFragmentManager, "refresh dialog")*/
+        val restartDialog = ConfirmConversationRefreshDialog()
+        restartDialog.show(this.parentFragmentManager, "refresh dialog")
         //TODO: fix to changes languages when new ones selected instead of rhis
         setInitialButtonLanguages()
         translationItemList.clear()
         repository.deleteAll()
         //TODO: move somewhere else and check if not in downloaded list
        // deleteLanguage(sourceLanguageCode)
-       // deleteLanguage(targetLanguageCode)
+        //deleteLanguage(targetLanguageCode)
         translator.close()
         conversationAdapter.notifyDataSetChanged()
     }
 
+    fun deleteAllModels(models: List<String>){
+        for (model in models){
+            deleteLanguage(model)
+        }
+    }
 
     ////////////////////////////////////////////////////////
 
     //TODO: fix so that conversation is deleted before closing app instead of in ocreate
-    override fun onDestroy() {
+    override fun onDestroyView() {
+        deleteAllModels(downloadedModels)
         restartConversation()
         //delete database rather than just its contents - does this get recreated upon refresh
         //or just restart of the app?
         context?.deleteDatabase("converser_database")
-        super.onDestroy()
+        super.onDestroyView()
     }
 
     /**
