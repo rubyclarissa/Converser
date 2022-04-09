@@ -13,15 +13,19 @@
         <entry key="app/src/main/res/drawable/translate_button_background.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/fragment_confirm_refresh_conversation_dialog.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/fragment_download_languages.xml" value="0.1077933082707621" />
         <entry key="app/src/main/res/layout/fragment_downloading_language_model_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_translator.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/language_list_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/language_spinner.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/layout/navigation_drawer.xml" value="0.196875" />
         <entry key="app/src/main/res/layout/translated_message_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/translated_message_item_first_language.xml" value="0.165" />
         <entry key="app/src/main/res/layout/translated_message_item_second_language.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/translated_translation_item_first_language.xml" value="0.19322916666666667" />
-        <entry key="app/src/main/res/layout/translated_translation_item_second_language.xml" value="0.19322916666666667" />
+        <entry key="app/src/main/res/layout/translated_translation_item_first_language.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/translated_translation_item_second_language.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/menu_nav_drawer.xml" value="0.196875" />
       </map>
     </option>
   </component>

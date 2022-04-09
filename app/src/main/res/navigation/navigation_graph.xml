@@ -8,7 +8,12 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="uk.ac.aber.dcs.rco1.converser.view.home.TranslatorFragment"
-        android:label="@string/fragmentHome"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_translator" />
+    <fragment
+        android:id="@+id/navigation_download_languages"
+        android:name="uk.ac.aber.dcs.rco1.converser.view.downloadLanguages.DownloadLanguagesFragment"
+        android:label="@string/fragment_download_languages"
+        tools:layout="@layout/fragment_download_languages" />
 
 </navigation>

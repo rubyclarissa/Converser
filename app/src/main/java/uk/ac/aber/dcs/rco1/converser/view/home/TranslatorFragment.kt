@@ -34,6 +34,8 @@ import uk.ac.aber.dcs.rco1.converser.model.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentTranslatorBinding
 import uk.ac.aber.dcs.rco1.converser.model.home.PositionInConversation
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
+import uk.ac.aber.dcs.rco1.converser.view.dialogs.ConfirmConversationRefreshDialogFragment
+import uk.ac.aber.dcs.rco1.converser.view.dialogs.DownloadLanguageModelDialogFragment
 import uk.ac.aber.dcs.rco1.converser.viewModel.TranslatorViewModel
 import kotlin.collections.ArrayList
 
@@ -43,7 +45,7 @@ import kotlin.collections.ArrayList
  */
 class TranslatorFragment : Fragment() {
 
-    private lateinit var homeFragmentBinding: FragmentTranslatorBinding
+    private lateinit var translatorFragmentBinding: FragmentTranslatorBinding
 
     //used instead of the depreciated startActivityForResult in speak method
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
@@ -110,7 +112,7 @@ class TranslatorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        homeFragmentBinding = FragmentTranslatorBinding.inflate(inflater, container, false)
+        translatorFragmentBinding = FragmentTranslatorBinding.inflate(inflater, container, false)
 
         translationItemList = ArrayList()
 
@@ -124,7 +126,7 @@ class TranslatorFragment : Fragment() {
         setUpTranslatorViewModel()
 
         if (translationItemRecyclerView.isEmpty()){
-            homeFragmentBinding.quickLanguageSelections.isVisible = false
+            translatorFragmentBinding.quickLanguageSelections.isVisible = false
         }
 
         stringToTranslate = inputText.text.toString()
@@ -137,7 +139,7 @@ class TranslatorFragment : Fragment() {
 
         repository = ConverserRepository(requireActivity().application)
 
-        return homeFragmentBinding.root
+        return translatorFragmentBinding.root
     }
 
 
@@ -173,11 +175,11 @@ class TranslatorFragment : Fragment() {
     private fun setListenerForSpeechRecording() {
         //support if user presses and holds
         micFAB.setOnLongClickListener {
-            speak(homeFragmentBinding.recordVoice)
+            speak(translatorFragmentBinding.recordVoice)
         }
         //support if user just presses
         micFAB.setOnClickListener {
-            speak(homeFragmentBinding.recordVoice)
+            speak(translatorFragmentBinding.recordVoice)
         }
     }
 
@@ -231,8 +233,8 @@ class TranslatorFragment : Fragment() {
     private fun setListenerForTranslation() {
         translateButton.setOnClickListener {
 
-            if (!homeFragmentBinding.quickLanguageSelections.isVisible){
-                    homeFragmentBinding.quickLanguageSelections.isVisible = true
+            if (!translatorFragmentBinding.quickLanguageSelections.isVisible){
+                    translatorFragmentBinding.quickLanguageSelections.isVisible = true
             }
             //create translator object with configurations for source and target languages
             val options = TranslatorOptions.Builder()
@@ -274,7 +276,7 @@ class TranslatorFragment : Fragment() {
                                 Toast.makeText(activity, "Translating", Toast.LENGTH_SHORT).show()
                             }
                             //translate the input text using the translator model that was just created
-                            translator.translate(homeFragmentBinding.textBox.text.toString())
+                            translator.translate(translatorFragmentBinding.textBox.text.toString())
                                 .addOnSuccessListener { translatedText ->
                                     Log.i("TAG", "Translation is " + translatedText as String)
 
@@ -550,15 +552,15 @@ class TranslatorFragment : Fragment() {
      *
      */
     private fun getUIElements() {
-        translationItemRecyclerView = homeFragmentBinding.conversationRecyclerView
-        inputText = homeFragmentBinding.textBox
-        translateButton = homeFragmentBinding.translateButton
-        micFAB = homeFragmentBinding.recordVoice
-        sourceSpinner = homeFragmentBinding.sourceLanguageSpinner
-        targetSpinner = homeFragmentBinding.targetLanguageSpinner
-        swapButton = homeFragmentBinding.swapLanguages
-        leftLanguageButton = homeFragmentBinding.leftLanguageButton
-        rightLanguageButton = homeFragmentBinding.rightLanguageButton
+        translationItemRecyclerView = translatorFragmentBinding.conversationRecyclerView
+        inputText = translatorFragmentBinding.textBox
+        translateButton = translatorFragmentBinding.translateButton
+        micFAB = translatorFragmentBinding.recordVoice
+        sourceSpinner = translatorFragmentBinding.sourceLanguageSpinner
+        targetSpinner = translatorFragmentBinding.targetLanguageSpinner
+        swapButton = translatorFragmentBinding.swapLanguages
+        leftLanguageButton = translatorFragmentBinding.leftLanguageButton
+        rightLanguageButton = translatorFragmentBinding.rightLanguageButton
     }
 
     /**
@@ -568,13 +570,13 @@ class TranslatorFragment : Fragment() {
     private fun setupSpinners() {
         setupSpinner(
             view,
-            homeFragmentBinding.sourceLanguageSpinner,
+            translatorFragmentBinding.sourceLanguageSpinner,
             R.array.sourceLanguages
         )
 
         setupSpinner(
             view,
-            homeFragmentBinding.targetLanguageSpinner,
+            translatorFragmentBinding.targetLanguageSpinner,
             R.array.targetLanguages
         )
     }
@@ -619,8 +621,9 @@ class TranslatorFragment : Fragment() {
 
 
     private fun restartConversation() {
-        val restartDialog = ConfirmConversationRefreshDialog()
-        restartDialog.show(this.parentFragmentManager, "refresh dialog")
+       /* val restartDialog = ConfirmConversationRefreshDialogFragment()
+        restartDialog.show(this.parentFragmentManager, "refresh dialog")*/
+
         //TODO: fix to changes languages when new ones selected instead of rhis
         setInitialButtonLanguages()
         translationItemList.clear()
@@ -628,7 +631,9 @@ class TranslatorFragment : Fragment() {
         //TODO: move somewhere else and check if not in downloaded list
        // deleteLanguage(sourceLanguageCode)
         //deleteLanguage(targetLanguageCode)
-        translator.close()
+        if (this::translator.isInitialized){
+            translator.close()
+        }
         conversationAdapter.notifyDataSetChanged()
     }
 

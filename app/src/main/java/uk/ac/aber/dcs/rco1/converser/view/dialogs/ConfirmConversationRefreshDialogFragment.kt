@@ -1,14 +1,13 @@
-package uk.ac.aber.dcs.rco1.converser.view.home
+package uk.ac.aber.dcs.rco1.converser.view.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import uk.ac.aber.dcs.rco1.converser.R
 import java.lang.IllegalStateException
 
-class ConfirmConversationRefreshDialog: DialogFragment() {
+class ConfirmConversationRefreshDialogFragment: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {

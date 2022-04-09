@@ -1,12 +1,9 @@
-package uk.ac.aber.dcs.rco1.converser.view.home
+package uk.ac.aber.dcs.rco1.converser.view.dialogs
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import uk.ac.aber.dcs.rco1.converser.R
 import java.lang.IllegalStateException
 
