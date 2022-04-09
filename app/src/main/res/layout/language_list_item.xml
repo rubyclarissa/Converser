@@ -16,17 +16,16 @@
         android:id="@+id/languageTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:layout_weight="0.8"
         android:layout_gravity="center_vertical"
         android:paddingLeft="4dp"/>
 
     <ImageButton
         android:id="@+id/downloadButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:srcCompat="@drawable/ic_baseline_download_24"
-        android:layout_weight="0.2"/>
+        android:background="@drawable/download_language_button_background"/>
 
 </LinearLayout>
 

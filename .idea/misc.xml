@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/background_first_language.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/background_second_language.xml" value="0.165" />
         <entry key="app/src/main/res/drawable/conversation_background.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/drawable/download_language_button_background.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/drawable/language_selection_background.xml" value="0.23541666666666666" />
         <entry key="app/src/main/res/drawable/left_button_background.xml" value="0.24814814814814815" />
         <entry key="app/src/main/res/drawable/right_button_background.xml" value="0.24814814814814815" />
