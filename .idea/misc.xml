@@ -24,7 +24,7 @@
         <entry key="app/src/main/res/layout/translated_message_item_first_language.xml" value="0.165" />
         <entry key="app/src/main/res/layout/translated_message_item_second_language.xml" value="0.25" />
         <entry key="app/src/main/res/layout/translated_translation_item_first_language.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/translated_translation_item_second_language.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/translated_translation_item_second_language.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_nav_drawer.xml" value="0.196875" />
       </map>
     </option>
