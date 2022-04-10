@@ -621,8 +621,9 @@ class TranslatorFragment : Fragment() {
 
 
     private fun restartConversation() {
-       /* val restartDialog = ConfirmConversationRefreshDialogFragment()
-        restartDialog.show(this.parentFragmentManager, "refresh dialog")*/
+        //TODO: fix so that buttons work and this is called before restarting convo
+        val restartDialog = ConfirmConversationRefreshDialogFragment()
+        restartDialog.show(this.parentFragmentManager, "refresh dialog")
 
         //TODO: fix to changes languages when new ones selected instead of rhis
         setInitialButtonLanguages()
@@ -631,6 +632,7 @@ class TranslatorFragment : Fragment() {
         //TODO: move somewhere else and check if not in downloaded list
        // deleteLanguage(sourceLanguageCode)
         //deleteLanguage(targetLanguageCode)
+        //clean up the translator object if one was created
         if (this::translator.isInitialized){
             translator.close()
         }

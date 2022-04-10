@@ -29,15 +29,15 @@ class DownloadLanguagesFragment : Fragment() {
         downloadLanguagesFragmentBinding = FragmentDownloadLanguagesBinding.inflate(inflater, container, false)
 
         // private lateinit var viewModel: DownloadLanguagesViewModel
-        var languagesRecyclerView: RecyclerView = downloadLanguagesFragmentBinding.languagesRecyclerView
-
+        val languagesRecyclerView: RecyclerView = downloadLanguagesFragmentBinding.languagesRecyclerView
         val languagesList = resources.getStringArray(R.array.allLanguages)
         val languages: MutableList<String> = languagesList.toMutableList()
-
         val languagesAdapter = DownloadLanguagesAdapter(requireContext(), languages)
         languagesRecyclerView.adapter = languagesAdapter
         val languagesLayoutManager = LinearLayoutManager(context)
         languagesRecyclerView.layoutManager = languagesLayoutManager
+
+
 
 
        // return inflater.inflate(R.layout.fragment_download_languages, container, false)

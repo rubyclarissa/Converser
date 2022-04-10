@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,8 @@ class DownloadLanguagesAdapter(
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val language: TextView = itemView.findViewById<TextView>(R.id.languageTextView)
+        val downloadButton: ImageButton = itemView.findViewById<ImageButton>(R.id.downloadButton)
+        var isDownloaded: Boolean = false
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -27,9 +30,20 @@ class DownloadLanguagesAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val langItem = languages[position]
-
         val viewHolder = holder as ViewHolder
         viewHolder.language.text = langItem
+
+        //change button image to downloaded/non downloaded when clicked
+        viewHolder.downloadButton.setOnClickListener {
+            if (viewHolder.isDownloaded){
+                viewHolder.downloadButton.setImageResource(R.drawable.ic_baseline_download_24)
+                viewHolder.isDownloaded = false
+            }
+            if(!viewHolder.isDownloaded){
+                viewHolder.downloadButton.setImageResource(R.drawable.ic_baseline_download_done_24)
+                viewHolder.isDownloaded = true
+            }
+        }
     }
 
     override fun getItemCount(): Int {
