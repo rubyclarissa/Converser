@@ -3,8 +3,10 @@ package uk.ac.aber.dcs.rco1.converser.view.home
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.text.TextRunShaper
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextUtils.isEmpty
 import android.util.Log
@@ -29,6 +31,7 @@ import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import org.w3c.dom.Text
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.model.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentTranslatorBinding
@@ -37,13 +40,14 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 import uk.ac.aber.dcs.rco1.converser.view.dialogs.ConfirmConversationRefreshDialogFragment
 import uk.ac.aber.dcs.rco1.converser.view.dialogs.DownloadLanguageModelDialogFragment
 import uk.ac.aber.dcs.rco1.converser.viewModel.TranslatorViewModel
+import java.util.*
 import kotlin.collections.ArrayList
 
 /**
  * TODO
  *
  */
-class TranslatorFragment : Fragment() {
+class TranslatorFragment : Fragment(){
 
     private lateinit var translatorFragmentBinding: FragmentTranslatorBinding
 
@@ -97,6 +101,9 @@ class TranslatorFragment : Fragment() {
 
     //uses proprety delegate from fragment ktx artefact instead of making an object
     val translatorViewModel: TranslatorViewModel by viewModels()
+
+    //tts
+    lateinit var tts: TextToSpeech
 
     /**
      * TODO
@@ -622,8 +629,10 @@ class TranslatorFragment : Fragment() {
 
     private fun restartConversation() {
         //TODO: fix so that buttons work and this is called before restarting convo
-        val restartDialog = ConfirmConversationRefreshDialogFragment()
-        restartDialog.show(this.parentFragmentManager, "refresh dialog")
+        if (!translationItemRecyclerView.isEmpty()){
+            val restartDialog = ConfirmConversationRefreshDialogFragment()
+            restartDialog.show(this.parentFragmentManager, "refresh dialog")
+        }
 
         //TODO: fix to changes languages when new ones selected instead of rhis
         setInitialButtonLanguages()
@@ -644,6 +653,19 @@ class TranslatorFragment : Fragment() {
             deleteLanguage(model)
         }
     }
+
+   /* private fun SetListenerForConvertTextToSpeechLangA(){
+       conversationAdapter.langAclickListener = View.OnClickListener { view ->
+           //do tts for lang a
+           tts = TextToSpeech(requireContext(), TextToSpeech.OnInitListener {
+               if (it == TextToSpeech.SUCCESS){
+                   tts.language = Locale.ENGLISH
+                   tts.speak()
+               }
+           })
+       }
+    }*/
+
 
     ////////////////////////////////////////////////////////
 
@@ -719,5 +741,6 @@ class TranslatorFragment : Fragment() {
         val dialog = DownloadLanguageModelDialogFragment()
         dialog.show(this.parentFragmentManager, "download dialog")
     }
+
 
 }

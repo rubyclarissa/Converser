@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.aber.dcs.rco1.converser.R
@@ -25,7 +26,9 @@ class ConversationAdapter(
     //var translationItemList: List<TranslationItem>,
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var translationItemList: List<TranslationItem> = listOf()
-    var clickListener: View.OnClickListener? = null
+    var langAclickListener: View.OnClickListener? = null
+    var langBclickListener: View.OnClickListener? = null
+
 
     /**
      * TODO
@@ -38,6 +41,11 @@ class ConversationAdapter(
     inner class LanguageAViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val originalTranslationItemA: TextView = itemView.findViewById<TextView>(R.id.languageAOriginalTranslationItem)
         val translatedTranslationItemA: TextView = itemView.findViewById<TextView>(R.id.languageATranslatedTranslationItem)
+        val ttsButton: ImageButton = itemView.findViewById(R.id.textToSpeechButton)
+
+        init{
+            ttsButton.setOnClickListener(langAclickListener)
+        }
     }
 
     /**
@@ -51,6 +59,11 @@ class ConversationAdapter(
     inner class LanguageBViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val originalTranslationItemB = itemView.findViewById<TextView>(R.id.languageBOriginalTranslationItem)
         val translatedTranslationItemB = itemView.findViewById<TextView>(R.id.languageBTranslatedTranslationItem)
+        val ttsButton: ImageButton = itemView.findViewById(R.id.textToSpeechButton)
+
+        init{
+            ttsButton.setOnClickListener(langBclickListener)
+        }
     }
 
     /**
@@ -111,7 +124,6 @@ class ConversationAdapter(
             val viewHolder = holder as LanguageAViewHolder
             viewHolder.originalTranslationItemA.text = currentTranslationItem.originalTranslationItem
             viewHolder.translatedTranslationItemA.text = currentTranslationItem.translatedTranslationItem
-
         } else{
             //do staff for language b view holder
             val viewHolder = holder as LanguageBViewHolder
