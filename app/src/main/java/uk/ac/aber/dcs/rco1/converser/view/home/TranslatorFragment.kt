@@ -228,6 +228,7 @@ class TranslatorFragment : Fragment(){
             }
     }
 
+    //TODO: fix as none in downloadedmodels when app is loaded
     private fun downloadModelIfNotOnDevice(languageCode: String){
         getDownloadedModels()
         if (!downloadedModels.contains(languageCode)) {
@@ -639,7 +640,7 @@ class TranslatorFragment : Fragment(){
         translationItemList.clear()
         repository.deleteAll()
         //TODO: move somewhere else and check if not in downloaded list
-       // deleteLanguage(sourceLanguageCode)
+        //deleteLanguage(sourceLanguageCode)
         //deleteLanguage(targetLanguageCode)
         //clean up the translator object if one was created
         if (this::translator.isInitialized){
