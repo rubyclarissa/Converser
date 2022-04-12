@@ -186,6 +186,8 @@ class TranslatorFragment : Fragment(){
         }
     }
 
+    //save model data to file when screens changed, app closed etc as a failsafe
+    //in case it was written for any reason when a downloaded model list was changed
     override fun onPause() {
         super.onPause()
         writeDownloadedModelsDataToFile()
