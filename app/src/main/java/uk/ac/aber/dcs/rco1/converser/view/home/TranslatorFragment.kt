@@ -2,6 +2,7 @@ package uk.ac.aber.dcs.rco1.converser.view.home
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.text.TextRunShaper
 import android.os.Bundle
@@ -40,8 +41,12 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 import uk.ac.aber.dcs.rco1.converser.view.dialogs.ConfirmConversationRefreshDialogFragment
 import uk.ac.aber.dcs.rco1.converser.view.dialogs.DownloadLanguageModelDialogFragment
 import uk.ac.aber.dcs.rco1.converser.viewModel.TranslatorViewModel
+import java.io.File
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
+
+const val DOWNLOADED_MODELS_TEXT_FILE = "downloadedModelsFile.txt"
 
 /**
  * TODO
@@ -105,6 +110,9 @@ class TranslatorFragment : Fragment(){
     //tts
     lateinit var tts: TextToSpeech
 
+    //read downloded language model codes from text file
+    lateinit var downloadedModelsTextFile: File
+
     /**
      * TODO
      *
@@ -147,6 +155,40 @@ class TranslatorFragment : Fragment(){
         repository = ConverserRepository(requireActivity().application)
 
         return translatorFragmentBinding.root
+    }
+
+    //read downloaded langugages codes from file when app is opened
+    override fun onStart() {
+        super.onStart()
+
+        downloadedModelsTextFile = File(requireContext().filesDir, DOWNLOADED_MODELS_TEXT_FILE)
+        readDownloadedModelsDataFromFile()
+    }
+
+    private fun readDownloadedModelsDataFromFile(){
+
+      //  val fileInputStream = requireContext().openFileInput(DOWNLOADED_MODELS_TEXT_FILE)
+        if (downloadedModelsTextFile.exists()){
+            downloadedModels = downloadedModelsTextFile.readLines()
+        }
+    }
+
+    private fun writeDownloadedModelsDataToFile(){
+        try {
+            val fileOutputStream = requireContext().openFileOutput(DOWNLOADED_MODELS_TEXT_FILE, MODE_PRIVATE)
+            for (model in downloadedModels){
+                fileOutputStream.write(model.toByteArray())
+                fileOutputStream.write(System.lineSeparator().toByteArray())
+            }
+            fileOutputStream.close()
+        } catch (e: Exception){
+            Log.i("TAG", "failure writing to downloaded models file")
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        writeDownloadedModelsDataToFile()
     }
 
 
@@ -204,6 +246,7 @@ class TranslatorFragment : Fragment(){
         val conditions = DownloadConditions.Builder()
             .requireWifi()
             .build()
+
         languageModelManager.download(model, conditions).addOnCompleteListener {
             dialog.dismiss()
         }
@@ -235,6 +278,7 @@ class TranslatorFragment : Fragment(){
             Log.i("TAG", "Downloaded models:" + downloadedModels)
             downloadLanguage(languageCode)
             getDownloadedModels()
+            writeDownloadedModelsDataToFile()
         }
     }
 
@@ -672,7 +716,7 @@ class TranslatorFragment : Fragment(){
 
     //TODO: fix so that conversation is deleted before closing app instead of in ocreate
     override fun onDestroyView() {
-        deleteAllModels(downloadedModels)
+        //deleteAllModels(downloadedModels)
         restartConversation()
         //delete database rather than just its contents - does this get recreated upon refresh
         //or just restart of the app?
