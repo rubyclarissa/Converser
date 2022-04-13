@@ -648,7 +648,7 @@ class TranslatorFragment : Fragment(){
         speechRecognizerIntent.putExtra(
             //Informs the recognizer which speech model to prefer when performing
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            //Use a positionInConversation model based on free-form speech recognition.
+            //Use a language model based on free-form speech recognition.
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
         //This tag informs the recognizer to perform speech recognition in a positionInConversation

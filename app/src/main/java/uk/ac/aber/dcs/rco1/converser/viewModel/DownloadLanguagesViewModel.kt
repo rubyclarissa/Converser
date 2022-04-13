@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.rco1.converser.view.downloadLanguages
+package uk.ac.aber.dcs.rco1.converser.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

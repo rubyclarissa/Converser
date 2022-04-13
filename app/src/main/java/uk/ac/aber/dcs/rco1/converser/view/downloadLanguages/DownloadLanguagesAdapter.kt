@@ -34,6 +34,9 @@ class DownloadLanguagesAdapter(
         viewHolder.language.text = langItem
 
         //change button image to downloaded/non downloaded when clicked
+        //TODO: fix as always set to false.
+        // create click listener val and set button click listener in view holder class instead
+        // then handle in fragment / viewmodel for fragement
         viewHolder.downloadButton.setOnClickListener {
             if (viewHolder.isDownloaded){
                 viewHolder.downloadButton.setImageResource(R.drawable.ic_baseline_download_24)
