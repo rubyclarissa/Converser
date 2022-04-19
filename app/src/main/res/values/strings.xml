@@ -7,6 +7,16 @@
     <string name="nav_open_drawer">open drawer</string>
     <string name="nav_close_drawer">close drawer</string>
     <string name="fragment_download_languages">Download Languages</string>
+    <string name="downloading_language_model">Downloading language model</string>
+    <string name="default_quick_language_selection_button_text">English</string>
+    <string name="FAB_button_description">Record speech input</string>
+    <string name="translate_button_description">Translate</string>
+    <string name="target_spinner_description">target language selection</string>
+    <string name="source_language_spinner_description">source language selection</string>
+    <string name="swap_button_description">Swap languages</string>
+    <string name="download_button">download</string>
+    <string name="converser_logo_banner">converser logo banner</string>
+    <string name="play_text_to_speech">play text to speech</string>
 
     <string-array name="sourceLanguages">
         <item>From</item>

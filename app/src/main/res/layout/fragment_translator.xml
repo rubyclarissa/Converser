@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.home.TranslatorFragment"
-    android:background="@color/off_white">
+    android:background="@color/off_white"
+    android:id="@+id/translator_constraint_layout">
 
     <!-- TODO: Update blank fragment layout -->
 
     <!-- PositionInConversation selection ribbon -->
     <LinearLayout
-        android:id="@+id/languageSelection"
+        android:id="@+id/language_selection"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
@@ -27,21 +28,23 @@
             android:id="@+id/source_language_spinner"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_weight="0.4"
+            android:layout_gravity="center"
             android:layout_margin="4dp"
-            android:padding="4dp"
-            android:layout_gravity="center"/>
+            android:layout_weight="0.4"
+            android:contentDescription="@string/source_language_spinner_description"
+            android:padding="4dp" />
 
 
         <ImageButton
-            android:id="@+id/swapLanguages"
+            android:id="@+id/swap_languages_button"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_weight="0.2"
-            android:src="@drawable/ic_baseline_swap_horiz_24"
             android:layout_gravity="center"
+            android:layout_weight="0.2"
             android:backgroundTint="@color/off_white"
-            android:scaleType="fitXY"/>
+            android:contentDescription="@string/swap_button_description"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_swap_horiz_24" />
 
         <Spinner
             android:id="@+id/target_language_spinner"
@@ -50,6 +53,7 @@
             android:layout_gravity="center"
             android:layout_margin="4dp"
             android:layout_weight="0.4"
+            android:contentDescription="@string/target_spinner_description"
             android:padding="4dp" />
 
     </LinearLayout>
@@ -83,13 +87,13 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/conversation_background"
         android:padding="4dp"
-        app:layout_constraintBottom_toTopOf="@id/recordVoice"
+        app:layout_constraintBottom_toTopOf="@id/record_voice_FAB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/languageSelection">
+        app:layout_constraintTop_toBottomOf="@+id/language_selection">
     </View>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/conversationRecyclerView"
+            android:id="@+id/conversation_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="4dp"
@@ -102,23 +106,23 @@
             app:layout_constraintVertical_bias="0.0" />
 
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/recordVoice"
+        android:id="@+id/record_voice_FAB"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/light_purple"
         android:clickable="true"
+        android:contentDescription="@string/FAB_button_description"
         android:scaleType="fitXY"
         android:src="@drawable/ic_baseline_mic_24"
-        app:layout_constraintBottom_toTopOf="@id/textInputArea"
+        app:layout_constraintBottom_toTopOf="@id/text_input_area"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/conversationRecyclerView"/>
+        app:layout_constraintTop_toBottomOf="@id/conversation_recycler_view" />
 
     <LinearLayout
-        android:id="@+id/textInputArea"
+        android:id="@+id/text_input_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -128,7 +132,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <EditText
-            android:id="@+id/textBox"
+            android:id="@+id/text_box"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
@@ -138,51 +142,55 @@
             android:hint="@string/enter_text"
             android:padding="4dp"
             android:elevation="4dp"
-            android:layout_margin="4dp"/>
+            android:layout_margin="4dp"
+            android:inputType="text"
+            android:autofillHints="" />
 
         <ImageButton
             android:id="@+id/translate_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_baseline_send_24"
-            android:background="@drawable/translate_button_background"/>
+            android:background="@drawable/translate_button_background"
+            android:contentDescription="@string/translate_button_description"
+            android:src="@drawable/ic_baseline_send_24" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/quickLanguageSelections"
+        android:id="@+id/quick_language_selections"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/textInputArea"
+        app:layout_constraintBottom_toTopOf="@+id/text_input_area"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/conversationRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/conversation_recycler_view"
         android:gravity="center"
         android:visibility="visible">
 
         <Button
-            android:id="@+id/leftLanguageButton"
+            android:id="@+id/left_language_button"
             android:layout_width="wrap_content"
-            android:minWidth="160dp"
-            android:maxWidth="160dp"
             android:layout_height="wrap_content"
             android:background="@drawable/left_button_background"
-            app:backgroundTint="@color/active_button"
-            android:text="English"
+            android:maxWidth="160dp"
+            android:minWidth="160dp"
             android:paddingEnd="40dp"
+            android:text="@string/default_quick_language_selection_button_text"
+            android:textAlignment="viewStart"
+            app:backgroundTint="@color/active_button"
             app:layout_constraintStart_toStartOf="parent"
-            android:textAlignment="viewStart"/>
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button
-            android:id="@+id/rightLanguageButton"
+            android:id="@+id/right_language_button"
             android:layout_width="wrap_content"
             android:minWidth="160dp"
             android:maxWidth="160dp"
             android:layout_height="wrap_content"
             app:backgroundTint="@color/unactive_button"
-            android:text="English"
+            android:text="@string/default_quick_language_selection_button_text"
             android:paddingStart="40dp"
             android:background="@drawable/right_button_background"
             app:layout_constraintEnd_toEndOf="parent"

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/language_list_item_linear_layout">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -13,23 +14,25 @@
         android:padding="4dp">
 
     <TextView
-        android:id="@+id/languageTextView"
+        android:id="@+id/language_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.8"
         android:layout_gravity="center_vertical"
-        android:paddingLeft="4dp"/>
+        android:paddingStart="4dp"/>
 
-    <ImageButton
-        android:id="@+id/downloadButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:srcCompat="@drawable/ic_baseline_download_24"
-        android:background="@drawable/download_language_button_background"/>
+        <ImageButton
+            android:id="@+id/download_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/download_language_button_background"
+            android:contentDescription="@string/download_button"
+            app:srcCompat="@drawable/ic_baseline_download_24" />
 
 </LinearLayout>
 
 <View
+    android:id="@+id/separator"
 android:layout_width="match_parent"
 android:layout_height="1px"
 android:layout_marginLeft="10dp"

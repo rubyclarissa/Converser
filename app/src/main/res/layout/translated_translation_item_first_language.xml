@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/first_language_item_constraint_layout">
 
     <LinearLayout
         android:layout_margin="4dp"
@@ -15,15 +15,17 @@
         android:paddingStart="16dp"
         android:paddingEnd="8dp"
         android:background="@drawable/background_first_language"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/first_language_item_linear_layout">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/first_language_translation_linear_layout">
 
     <TextView
-        android:id="@+id/languageAOriginalTranslationItem"
+        android:id="@+id/language_A_original_translation_item"
         android:layout_width="wrap_content"
         android:minWidth="100dp"
         android:maxWidth="275dp"
@@ -33,26 +35,27 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/languageATranslatedTranslationItem"
+        android:id="@+id/language_A_translated_translation_item"
         android:layout_width="wrap_content"
         android:minWidth="100dp"
         android:maxWidth="275dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textAlignment="viewStart"
-        app:layout_constraintTop_toBottomOf="@id/languageAOriginalTranslationItem"
+        app:layout_constraintTop_toBottomOf="@id/language_A_original_translation_item"
         app:layout_constraintStart_toStartOf="parent"/>
 
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/textToSpeechButton"
+            android:id="@+id/text_to_speech_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:backgroundTint="@color/grey"
             android:height="48dp"
-            app:srcCompat="@drawable/ic_baseline_volume_up_24" />
+            app:srcCompat="@drawable/ic_baseline_volume_up_24"
+            android:contentDescription="@string/play_text_to_speech" />
 
     </LinearLayout>
 

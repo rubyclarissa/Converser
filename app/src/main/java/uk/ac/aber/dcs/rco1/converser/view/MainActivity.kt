@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navigation_host_fragment)
         as NavHostFragment
 
-        val navigationDrawer = binding.drawerLayout
+        val navigationDrawer = binding.mainActivityDrawerLayout
         val navDrawerView = binding.navControllerView
         val navController = navHostFragment.navController
         //val navController = findNavController(R.id.navigation_host_fragment)

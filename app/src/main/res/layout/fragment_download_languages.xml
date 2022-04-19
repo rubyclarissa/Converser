@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.downloadLanguages.DownloadLanguagesFragment">
+    tools:context=".view.downloadLanguages.DownloadLanguagesFragment"
+    android:id="@+id/download_languages_constraint_layout">
 
     <!--<TextView
         android:layout_width="match_parent"
@@ -13,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:text="hello"/>-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/languagesRecyclerView"
+        android:id="@+id/languages_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"

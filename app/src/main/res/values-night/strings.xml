@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="downloading_language_model">Downloading language model</string>
+    <string name="default_quick_language_selection_button_text">English</string>
+    <string name="FAB_button_description">Action button to record speech input</string>
+    <string name="translate_button_description">Translate button</string>
+    <string name="target_spinner_description">target language selection spinner</string>
+    <string name="source_language_spinner_description">source language selection spinner</string>
+    <string name="swap_button_description">Swap languages button</string>
+    <string name="download_button">download</string>
+    <string name="converser_logo_banner">converser logo banner</string>
+    <string name="play_text_to_speech">play text to speech</string>
+</resources>

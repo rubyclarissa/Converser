@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.graphics.text.TextRunShaper
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
@@ -32,7 +31,6 @@ import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import org.w3c.dom.Text
 import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.model.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.databinding.FragmentTranslatorBinding
@@ -43,7 +41,6 @@ import uk.ac.aber.dcs.rco1.converser.view.dialogs.DownloadLanguageModelDialogFra
 import uk.ac.aber.dcs.rco1.converser.viewModel.TranslatorViewModel
 import java.io.File
 import java.lang.Exception
-import java.util.*
 import kotlin.collections.ArrayList
 
 const val DOWNLOADED_MODELS_TEXT_FILE = "downloadedModelsFile.txt"
@@ -226,11 +223,11 @@ class TranslatorFragment : Fragment(){
     private fun setListenerForSpeechRecording() {
         //support if user presses and holds
         micFAB.setOnLongClickListener {
-            speak(translatorFragmentBinding.recordVoice)
+            speak(translatorFragmentBinding.recordVoiceFAB)
         }
         //support if user just presses
         micFAB.setOnClickListener {
-            speak(translatorFragmentBinding.recordVoice)
+            speak(translatorFragmentBinding.recordVoiceFAB)
         }
     }
 
@@ -537,48 +534,12 @@ class TranslatorFragment : Fragment(){
         }
     }
 
-    //when conversation has begun
-    private fun setActiveConversationButtonLanguages(){
-
-    }
-
-    //when conversation has begun
-    private fun setListenerForActiveLanguageButton() {
-        leftLanguageButton.setOnClickListener {
-            //set background colour of left button to active
-            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
-                requireContext(),
-                R.color.active_button
-            )
-
-            //set background colour of left button to inactive
-            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
-                requireContext(),
-                R.color.unactive_button
-            )
-
-            //do simmilar to swap button
-        }
-
-        rightLanguageButton.setOnClickListener {
-            leftLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
-                requireContext(),
-                R.color.unactive_button
-            )
-
-            rightLanguageButton.backgroundTintList = ContextCompat.getColorStateList(
-                requireContext(),
-                R.color.active_button
-            )
-
-            //do simmilar to swap button
-        }
-    }
-
 
     /**
      * Uses Intent mechanism to update the input text field with speech data when it is provided
-     *
+     * speech recognition data is obtained through call to onActivityResult (asynchronous call)
+     * startActivityForResult contract - generic contract that takes an intent and
+     *  returns an activityResult. extract results code and intent - once speech has been provided
      */
     private fun captureSpeechData(){
         lateinit var speechData: ArrayList<Editable>
@@ -609,10 +570,10 @@ class TranslatorFragment : Fragment(){
         translationItemRecyclerView = translatorFragmentBinding.conversationRecyclerView
         inputText = translatorFragmentBinding.textBox
         translateButton = translatorFragmentBinding.translateButton
-        micFAB = translatorFragmentBinding.recordVoice
+        micFAB = translatorFragmentBinding.recordVoiceFAB
         sourceSpinner = translatorFragmentBinding.sourceLanguageSpinner
         targetSpinner = translatorFragmentBinding.targetLanguageSpinner
-        swapButton = translatorFragmentBinding.swapLanguages
+        swapButton = translatorFragmentBinding.swapLanguagesButton
         leftLanguageButton = translatorFragmentBinding.leftLanguageButton
         rightLanguageButton = translatorFragmentBinding.rightLanguageButton
     }

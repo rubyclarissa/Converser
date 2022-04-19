@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageButton
-import android.widget.ListView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.aber.dcs.rco1.converser.R
@@ -17,8 +15,8 @@ class DownloadLanguagesAdapter(
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val language: TextView = itemView.findViewById<TextView>(R.id.languageTextView)
-        val downloadButton: ImageButton = itemView.findViewById<ImageButton>(R.id.downloadButton)
+        val language: TextView = itemView.findViewById<TextView>(R.id.language_text_view)
+        val downloadButton: ImageButton = itemView.findViewById<ImageButton>(R.id.download_button)
         var isDownloaded: Boolean = false
     }
 

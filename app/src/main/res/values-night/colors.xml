@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_purple">#9a67ea</color>
+    <color name="primary_purple">#683ccc</color>
+    <color name="dark_purple">#320b86</color>
+    <color name="accent_purple">#EAD8FF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="off_white">#F1F1F1</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="grey">#DFDFDF</color>
+    <color name="dark_grey">#858585</color>
+
+    <color name="active_button">@color/primary_purple</color>
+    <color name="unactive_button">@color/grey</color>
+</resources>
