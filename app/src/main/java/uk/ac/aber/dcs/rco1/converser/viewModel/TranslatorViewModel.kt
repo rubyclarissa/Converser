@@ -16,7 +16,8 @@ import uk.ac.aber.dcs.rco1.converser.model.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 
 /**
- * TODO
+ * View model class for the translator fragment
+ * Handles the logic of the fragment class (Currently only database communication)
  *
  * @constructor
  * TODO
