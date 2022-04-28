@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/first_language_item_constraint_layout">
+    android:id="@+id/first_language_item_constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_margin="4dp"
+        android:id="@+id/first_language_item_linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="4dp"
+        android:background="@drawable/background_first_language"
+        android:orientation="horizontal"
         android:padding="4dp"
         android:paddingStart="16dp"
         android:paddingEnd="8dp"
-        android:background="@drawable/background_first_language"
-        android:orientation="horizontal"
-        android:id="@+id/first_language_item_linear_layout">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/first_language_translation_linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/first_language_translation_linear_layout">
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/language_A_original_translation_item"
-        android:layout_width="wrap_content"
-        android:minWidth="100dp"
-        android:maxWidth="275dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/dark_grey"
-        app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/language_A_original_translation_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="275dp"
+                android:minWidth="100dp"
+                android:textColor="@color/dark_grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/language_A_translated_translation_item"
-        android:layout_width="wrap_content"
-        android:minWidth="100dp"
-        android:maxWidth="275dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textAlignment="viewStart"
-        app:layout_constraintTop_toBottomOf="@id/language_A_original_translation_item"
-        app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/language_A_translated_translation_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="275dp"
+                android:minWidth="100dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/language_A_original_translation_item" />
 
         </LinearLayout>
 
@@ -52,10 +52,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:backgroundTint="@color/grey"
             android:height="48dp"
-            app:srcCompat="@drawable/ic_baseline_volume_up_24"
-            android:contentDescription="@string/play_text_to_speech" />
+            android:backgroundTint="@color/grey"
+            android:contentDescription="@string/play_text_to_speech"
+            app:srcCompat="@drawable/ic_baseline_volume_up_24" />
 
     </LinearLayout>
 

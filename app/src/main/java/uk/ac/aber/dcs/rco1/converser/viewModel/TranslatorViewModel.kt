@@ -15,13 +15,16 @@ import com.google.mlkit.nl.translate.Translator
 import uk.ac.aber.dcs.rco1.converser.model.ConverserRepository
 import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 
+/**
+ * TODO
+ *
+ * @constructor
+ * TODO
+ *
+ * @param application
+ */
 class TranslatorViewModel(application: Application) :
     AndroidViewModel(application) {
-
-    /*private val _sourceText = MutableLiveData<String>()
-
-    val sourceText: LiveData<String>
-        get() = _sourceText*/
 
 
     private val repository: ConverserRepository = ConverserRepository(application)
@@ -30,14 +33,28 @@ class TranslatorViewModel(application: Application) :
         private set
 
 
+    /**
+     * TODO
+     *
+     * @return
+     */
     private fun getAllTranslationItems(): LiveData<List<TranslationItem>> {
         return repository.getAllTranslationItems()
     }
 
+    /**
+     * TODO
+     *
+     * @param translationItem
+     */
     fun addTranslationItemToConversation(translationItem: TranslationItem) {
         repository.insert(translationItem)
     }
 
+    /**
+     * TODO
+     *
+     */
     private fun deleteConversation() {
         repository.deleteAll()
     }
@@ -115,8 +132,6 @@ class TranslatorViewModel(application: Application) :
             else -> TranslateLanguage.ENGLISH
         }
     }
-
-
 
 
 }

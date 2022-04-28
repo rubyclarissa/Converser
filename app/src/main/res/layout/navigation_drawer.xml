@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_frame_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/nav_frame_layout">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/logo_banner"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/grey"
+        android:contentDescription="@string/converser_logo_banner"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/converser_logo"
-        android:contentDescription="@string/converser_logo_banner" />
+        app:srcCompat="@drawable/converser_logo" />
 </FrameLayout>

@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/second_language_item_constraint_layout">
+    android:id="@+id/second_language_item_constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_margin="4dp"
+        android:id="@+id/second_language_item_linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="4dp"
+        android:background="@drawable/background_second_language"
+        android:orientation="horizontal"
         android:padding="4dp"
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
-        android:background="@drawable/background_second_language"
-        android:orientation="horizontal"
-        android:id="@+id/second_language_item_linear_layout">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/text_to_speech_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:backgroundTint="@color/accent_purple"
             android:height="48dp"
-            app:srcCompat="@drawable/ic_baseline_volume_up_24"
-            android:contentDescription="@string/play_text_to_speech" />
+            android:backgroundTint="@color/accent_purple"
+            android:contentDescription="@string/play_text_to_speech"
+            app:srcCompat="@drawable/ic_baseline_volume_up_24" />
 
         <LinearLayout
+            android:id="@+id/second_language_translation_linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/second_language_translation_linear_layout">
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/language_B_original_translation_item"
-            android:layout_width="wrap_content"
-            android:minWidth="100dp"
-            android:maxWidth="275dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/dark_grey"
-            android:textAlignment="viewEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/language_B_original_translation_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="275dp"
+                android:minWidth="100dp"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/dark_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/language_B_translated_translation_item"
-            android:layout_width="wrap_content"
-            android:minWidth="100dp"
-            android:maxWidth="275dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textAlignment="viewEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/language_B_original_translation_item" />
+            <TextView
+                android:id="@+id/language_B_translated_translation_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="275dp"
+                android:minWidth="100dp"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/language_B_original_translation_item" />
         </LinearLayout>
 
     </LinearLayout>

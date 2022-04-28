@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uk.ac.aber.dcs.rco1.converser">
 
-    <!--for speech recognition -->
+    <!--speech recognition -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <!--for speech recognition and translation using API calls -->
@@ -12,7 +12,7 @@
     <uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name = "android.permission.READ_EXTERNAL_STORAGE"/>
 
-
+    <!-- app configurations -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

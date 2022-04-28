@@ -10,4 +10,6 @@
     <string name="download_button">download</string>
     <string name="converser_logo_banner">converser logo banner</string>
     <string name="play_text_to_speech">play text to speech</string>
+    <string name="menu_id_translator">Translator</string>
+    <string name="menu_id_download_languages">Download Languages</string>
 </resources>

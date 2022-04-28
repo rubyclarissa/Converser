@@ -7,7 +7,7 @@ plugins {
 android {
     compileSdk 31
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
 
@@ -20,6 +20,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        //database configuration for schema location
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation":
@@ -34,22 +35,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
 }
 
+//libraries / APIs
 dependencies {
 
     //implement MVVM
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+
     //support viewModels
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
     //get viewModels using by viewModels()
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
 

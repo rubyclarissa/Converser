@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
+    <!--home fragment -->
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_baseline_swap_horiz_24"
-        android:title="Translator" />
+        android:title="@string/menu_id_translator" />
+
+    <!--download languages fragment -->
     <item
         android:id="@+id/navigation_download_languages"
         android:icon="@drawable/ic_baseline_download_24"
-        android:title="Download Languages" />
+        android:title="@string/menu_id_download_languages" />
 </menu>

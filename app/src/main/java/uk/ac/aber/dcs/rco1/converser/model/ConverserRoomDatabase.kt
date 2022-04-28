@@ -20,7 +20,6 @@ abstract class ConverserRoomDatabase: RoomDatabase(){
     //allow way to make object of the DB as room insists on this being an abstract class
     companion object{
         private var instance: ConverserRoomDatabase? = null
-        private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
         fun getDatabase(context: Context): ConverserRoomDatabase?{
             synchronized(this){

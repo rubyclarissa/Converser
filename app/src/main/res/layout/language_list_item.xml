@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/language_list_item_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/language_list_item_linear_layout">
+    android:orientation="vertical">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_chainStyle="packed"
         android:layout_margin="4dp"
-        android:padding="4dp">
+        android:orientation="horizontal"
+        android:padding="4dp"
+        app:layout_constraintHorizontal_chainStyle="packed">
 
-    <TextView
-        android:id="@+id/language_text_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8"
-        android:layout_gravity="center_vertical"
-        android:paddingStart="4dp"/>
+        <TextView
+            android:id="@+id/language_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.8"
+            android:paddingStart="4dp"
+            tools:ignore="RtlSymmetry" />
 
         <ImageButton
             android:id="@+id/download_button"
@@ -29,13 +32,13 @@
             android:contentDescription="@string/download_button"
             app:srcCompat="@drawable/ic_baseline_download_24" />
 
-</LinearLayout>
+    </LinearLayout>
 
-<View
-    android:id="@+id/separator"
-android:layout_width="match_parent"
-android:layout_height="1px"
-android:layout_marginLeft="10dp"
-android:layout_marginRight="10dp"
-android:background="@color/grey"/>
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/grey" />
 </LinearLayout>

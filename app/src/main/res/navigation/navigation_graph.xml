@@ -5,11 +5,14 @@
     android:id="@+id/navigation_graph"
     app:startDestination="@id/navigation_home">
 
+    <!-- home fragment -->
     <fragment
         android:id="@+id/navigation_home"
         android:name="uk.ac.aber.dcs.rco1.converser.view.home.TranslatorFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_translator" />
+
+    <!-- download languages fragment -->
     <fragment
         android:id="@+id/navigation_download_languages"
         android:name="uk.ac.aber.dcs.rco1.converser.view.downloadLanguages.DownloadLanguagesFragment"
