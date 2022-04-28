@@ -38,8 +38,8 @@ class ConversationAdapter(
      * @param itemView - the view for a language A translation item (first language)
      */
     inner class LanguageAViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val originalTranslationItemA: TextView = itemView.findViewById<TextView>(R.id.language_A_original_translation_item)
-        val translatedTranslationItemA: TextView = itemView.findViewById<TextView>(R.id.language_A_translated_translation_item)
+        val originalTranslationItemA: TextView = itemView.findViewById(R.id.language_A_original_translation_item)
+        val translatedTranslationItemA: TextView = itemView.findViewById(R.id.language_A_translated_translation_item)
         val ttsButton: ImageButton = itemView.findViewById(R.id.text_to_speech_button)
 
         init{
@@ -55,8 +55,8 @@ class ConversationAdapter(
      * @param itemView - the view for a language B translation item (second language)
      */
     inner class LanguageBViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val originalTranslationItemB = itemView.findViewById<TextView>(R.id.language_B_original_translation_item)
-        val translatedTranslationItemB = itemView.findViewById<TextView>(R.id.language_B_translated_translation_item)
+        val originalTranslationItemB: TextView = itemView.findViewById(R.id.language_B_original_translation_item)
+        val translatedTranslationItemB: TextView = itemView.findViewById(R.id.language_B_translated_translation_item)
         val ttsButton: ImageButton = itemView.findViewById(R.id.text_to_speech_button)
 
         init{

@@ -11,7 +11,7 @@ import uk.ac.aber.dcs.rco1.converser.R
 import uk.ac.aber.dcs.rco1.converser.databinding.ActivityMainBinding
 
 /**
- * Single Activity : Many fragments - This is the entry point activity for the app
+ * This is the entry point activity for the app (Single Activity : Many fragments)
  * Hosts either the fragment for the home screen (translator) or the download languages screen
  * Implements AppCompatActivity - provides backwards compatibility of material design components
  */
