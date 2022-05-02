@@ -88,3 +88,5 @@ Alternatively install onto device from a browser on the device
 ----------------------------------------
 II. CURRENT BUGS
 ----------------------------------------
+A number of bugs are present
+PLEASE SEE TECHNICAL REPORT
