@@ -22,6 +22,9 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
  * @constructor
  *
  * @param application - application context required for AndroidViewModel
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 class TranslatorViewModel(application: Application) :
     AndroidViewModel(application) {

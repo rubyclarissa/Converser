@@ -8,6 +8,9 @@ import androidx.room.Query
 /**
  * Database access object contains methods to query the database
  * Room generates an implementation of this DAO when referenced by converser room db
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 @Dao
 interface TranslationItemDao {

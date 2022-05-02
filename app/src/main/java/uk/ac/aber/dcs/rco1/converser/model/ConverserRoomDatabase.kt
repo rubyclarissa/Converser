@@ -13,6 +13,9 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItemDao
 /**
  * A database which supports translation item entities
  * Implements Room which requires this to be an abstract class
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 @Database(entities = [TranslationItem::class], version = 1)
 abstract class ConverserRoomDatabase : RoomDatabase() {

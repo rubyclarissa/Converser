@@ -19,6 +19,9 @@ const val SECOND_LANGUAGE_IN_CONVERSATION = 2
  * Adapter class for the recycler view mechanism in the translator fragment
  *
  * @property context - the context associated with the translator fragment that gets passed in
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 class ConversationAdapter(
     val context: Context,

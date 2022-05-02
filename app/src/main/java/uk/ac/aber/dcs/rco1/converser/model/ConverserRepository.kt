@@ -11,6 +11,9 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
  * It uses a translation item DAO to perform operations on the database
  *
  * @param application - reference to the app context which is required to get the database
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 class ConverserRepository(application: Application) {
 

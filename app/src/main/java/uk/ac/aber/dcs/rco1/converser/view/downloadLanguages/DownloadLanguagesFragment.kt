@@ -12,6 +12,9 @@ import uk.ac.aber.dcs.rco1.converser.databinding.FragmentDownloadLanguagesBindin
 
 /**
  * Screen to download and delete languages for offline use
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 class DownloadLanguagesFragment : Fragment() {
 

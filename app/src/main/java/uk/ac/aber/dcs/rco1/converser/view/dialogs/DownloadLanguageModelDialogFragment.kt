@@ -11,6 +11,9 @@ import java.lang.IllegalStateException
  * A dialog for downloading a language model onto the device
  * Uses a custom layout
  *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
+ *
  */
 class DownloadLanguageModelDialogFragment : DialogFragment() {
 

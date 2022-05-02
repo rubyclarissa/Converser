@@ -10,6 +10,9 @@ import java.lang.IllegalStateException
 /**
  * A dialog for refreshing a conversation (to be called when a new conversation is started)
  *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
+ *
  */
 class ConfirmConversationRefreshDialogFragment : DialogFragment() {
 

@@ -14,6 +14,9 @@ import uk.ac.aber.dcs.rco1.converser.R
  *
  * @property context - the context associated with the download languages fragment passed in
  * @property languages -  the list of languages available for downloading
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 class DownloadLanguagesAdapter(
     val context: Context,

@@ -47,6 +47,9 @@ const val DOWNLOADED_MODELS_TEXT_FILE = "downloadedModelsFile.txt"
 /**
  * Home screen where translations and conversation takes place
  * Implements Fragment() - the constructor for a fragment factory
+ *
+ * @author Ruby Osborne (rco1)
+ * @version 1.0 (release)
  */
 class TranslatorFragment : Fragment() {
 
