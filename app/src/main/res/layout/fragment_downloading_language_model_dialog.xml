@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This is the layout for the dialog for downloading languages -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/downloading_dialog_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="50dp"
-    android:id="@+id/downloading_dialog_constraint_layout">
+    android:orientation="vertical"
+    android:padding="50dp">
 
+    <!-- text to indicate downloading -->
     <TextView
         android:id="@+id/text_view"
         android:layout_width="match_parent"
@@ -18,13 +20,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- circular progress bar to indicate downloading -->
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
         android:layout_marginTop="20dp"
+        android:indeterminate="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

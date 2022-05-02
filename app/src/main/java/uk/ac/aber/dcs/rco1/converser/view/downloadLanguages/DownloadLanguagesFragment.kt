@@ -31,10 +31,12 @@ class DownloadLanguagesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        downloadLanguagesFragmentBinding = FragmentDownloadLanguagesBinding.inflate(inflater, container, false)
+        downloadLanguagesFragmentBinding =
+            FragmentDownloadLanguagesBinding.inflate(inflater, container, false)
 
         //get the recycler view
-        val languagesRecyclerView: RecyclerView = downloadLanguagesFragmentBinding.languagesRecyclerView
+        val languagesRecyclerView: RecyclerView =
+            downloadLanguagesFragmentBinding.languagesRecyclerView
         //get the list of languages to display in recycler view
         val languagesList = resources.getStringArray(R.array.allLanguages)
         val languages: MutableList<String> = languagesList.toMutableList()
@@ -48,10 +50,10 @@ class DownloadLanguagesFragment : Fragment() {
         return downloadLanguagesFragmentBinding.root
     }
 
-   /* override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this)[DownloadLanguagesViewModel::class.java]
-        // TODO: Use a ViewModel class to handle logic
-    }*/
+    /* override fun onActivityCreated(savedInstanceState: Bundle?) {
+         super.onActivityCreated(savedInstanceState)
+         viewModel = ViewModelProvider(this)[DownloadLanguagesViewModel::class.java]
+         // TODO: Use a ViewModel class to handle logic
+     }*/
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- This is the layout for the home / translator screen -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,6 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- source language spinner -->
         <Spinner
             android:id="@+id/source_language_spinner"
             android:layout_width="0dp"
@@ -32,7 +33,7 @@
             android:contentDescription="@string/source_language_spinner_description"
             android:padding="4dp" />
 
-
+        <!-- swap language button -->
         <ImageButton
             android:id="@+id/swap_languages_button"
             android:layout_width="0dp"
@@ -44,6 +45,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_swap_horiz_24" />
 
+        <!-- target language spinner -->
         <Spinner
             android:id="@+id/target_language_spinner"
             android:layout_width="0dp"
@@ -70,6 +72,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/language_selection" />
 
+    <!-- conversation area which displays all items in a conversation -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/conversation_recycler_view"
         android:layout_width="match_parent"
@@ -110,6 +113,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <!-- text input box -->
         <EditText
             android:id="@+id/text_box"
             android:layout_width="0dp"
@@ -125,6 +129,7 @@
             android:minHeight="48dp"
             android:padding="4dp" />
 
+        <!-- button to send input for translation -->
         <ImageButton
             android:id="@+id/translate_button"
             android:layout_width="48dp"
@@ -136,6 +141,7 @@
 
     </LinearLayout>
 
+    <!-- quick language selection ribbon -->
     <LinearLayout
         android:id="@+id/quick_language_selections"
         android:layout_width="match_parent"
@@ -148,6 +154,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/conversation_recycler_view">
 
+        <!-- language A button -->
         <Button
             android:id="@+id/left_language_button"
             android:layout_width="wrap_content"
@@ -162,6 +169,7 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="ButtonStyle,DuplicateSpeakableTextCheck,RtlSymmetry" />
 
+        <!-- language B button -->
         <Button
             android:id="@+id/right_language_button"
             android:layout_width="wrap_content"
@@ -180,6 +188,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!--             android:background="@drawable/translate_button_background" -->

@@ -11,7 +11,7 @@ import java.lang.IllegalStateException
  * A dialog for refreshing a conversation (to be called when a new conversation is started)
  *
  */
-class ConfirmConversationRefreshDialogFragment: DialogFragment() {
+class ConfirmConversationRefreshDialogFragment : DialogFragment() {
 
     /**
      * Called when the dialog is created
@@ -24,8 +24,8 @@ class ConfirmConversationRefreshDialogFragment: DialogFragment() {
             //create an alert dialog
             val builder = AlertDialog.Builder(it)
             builder.setTitle("Refresh Conversation?")
-            .setMessage("You will lose this conversation forever. Do you wish to continue?")
-                .setPositiveButton("OK", DialogInterface.OnClickListener{dialog, id ->
+                .setMessage("You will lose this conversation forever. Do you wish to continue?")
+                .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
                     //TODO: handle clicked refresh
                     //TODO: handle refresh convo
                 })
@@ -36,7 +36,7 @@ class ConfirmConversationRefreshDialogFragment: DialogFragment() {
             //stop user from being able to tap on the background and dismiss the dialog
             isCancelable = false
             builder.create()
-        } ?:throw IllegalStateException("Activity cannot be null")
+        } ?: throw IllegalStateException("Activity cannot be null")
     }
 
 }

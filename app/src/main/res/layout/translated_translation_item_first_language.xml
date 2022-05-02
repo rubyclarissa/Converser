@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This is the layout for the speech bubble containing first translated item in a conversation -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/first_language_item_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!-- speech bubble for first item translated in conversation -->
     <LinearLayout
         android:id="@+id/first_language_item_linear_layout"
         android:layout_width="wrap_content"
@@ -18,12 +20,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- contents of translation item -->
         <LinearLayout
             android:id="@+id/first_language_translation_linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- original translation item text -->
             <TextView
                 android:id="@+id/language_A_original_translation_item"
                 android:layout_width="wrap_content"
@@ -34,6 +38,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- translated translation item text -->
             <TextView
                 android:id="@+id/language_A_translated_translation_item"
                 android:layout_width="wrap_content"
@@ -47,6 +52,7 @@
 
         </LinearLayout>
 
+        <!-- speaker button for TTS -->
         <ImageButton
             android:id="@+id/text_to_speech_button"
             android:layout_width="wrap_content"
@@ -58,6 +64,5 @@
             app:srcCompat="@drawable/ic_baseline_volume_up_24" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

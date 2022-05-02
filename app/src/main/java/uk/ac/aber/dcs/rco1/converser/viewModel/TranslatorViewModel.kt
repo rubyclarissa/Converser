@@ -18,42 +18,43 @@ import uk.ac.aber.dcs.rco1.converser.model.home.TranslationItem
 /**
  * View model class for the translator fragment
  * Handles the logic of the fragment class (Currently only database communication)
- *
+ * Implements AndroidViewModel - Need to use application context to instantiate a repository
  * @constructor
- * TODO
  *
- * @param application
+ * @param application - application context required for AndroidViewModel
  */
 class TranslatorViewModel(application: Application) :
     AndroidViewModel(application) {
 
-
+    //repository to use for communication with the database
     private val repository: ConverserRepository = ConverserRepository(application)
+
+    //list of translation items in the conversation
     var translationItems: LiveData<List<TranslationItem>> = getAllTranslationItems()
         //public get method which can only be set privately (read only from home fragment)
         private set
 
 
     /**
-     * TODO
+     * Gets all translation items in the conversation from the database
      *
-     * @return
+     * @return a list of translation items as live data
      */
     private fun getAllTranslationItems(): LiveData<List<TranslationItem>> {
         return repository.getAllTranslationItems()
     }
 
     /**
-     * TODO
+     * Adds a translation item into the conversation saved in the database
      *
-     * @param translationItem
+     * @param translationItem - the item to insert into a conversation
      */
     fun addTranslationItemToConversation(translationItem: TranslationItem) {
         repository.insert(translationItem)
     }
 
     /**
-     * TODO
+     * Removes all entries in the database
      *
      */
     private fun deleteConversation() {

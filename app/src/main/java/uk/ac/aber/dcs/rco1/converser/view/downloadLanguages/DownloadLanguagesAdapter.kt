@@ -62,19 +62,19 @@ class DownloadLanguagesAdapter(
         viewHolder.language.text = langItem
 
 
-            /*TODO: fix as always set to false
-             create click listener val and set button click listener in view holder class instead
-             then handle in fragment / view model for fragment
-        viewHolder.downloadButton.setOnClickListener {
-            if (viewHolder.isDownloaded){
-                viewHolder.downloadButton.setImageResource(R.drawable.ic_baseline_download_24)
-                viewHolder.isDownloaded = false
-            }
-            if(!viewHolder.isDownloaded){
-                viewHolder.downloadButton.setImageResource(R.drawable.ic_baseline_download_done_24)
-                viewHolder.isDownloaded = true
-            }
-        }*/
+        /*TODO: fix as always set to false
+         create click listener val and set button click listener in view holder class instead
+         then handle in fragment / view model for fragment
+    viewHolder.downloadButton.setOnClickListener {
+        if (viewHolder.isDownloaded){
+            viewHolder.downloadButton.setImageResource(R.drawable.ic_baseline_download_24)
+            viewHolder.isDownloaded = false
+        }
+        if(!viewHolder.isDownloaded){
+            viewHolder.downloadButton.setImageResource(R.drawable.ic_baseline_download_done_24)
+            viewHolder.isDownloaded = true
+        }
+    }*/
     }
 
     /**

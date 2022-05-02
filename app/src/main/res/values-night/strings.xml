@@ -1,15 +1,221 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="downloading_language_model">Downloading language model</string>
-    <string name="default_quick_language_selection_button_text">English</string>
-    <string name="FAB_button_description">Action button to record speech input</string>
-    <string name="translate_button_description">Translate button</string>
-    <string name="target_spinner_description">target language selection spinner</string>
-    <string name="source_language_spinner_description">source language selection spinner</string>
-    <string name="swap_button_description">Swap languages button</string>
-    <string name="download_button">download</string>
+    <string name="app_name" translatable="false">Converser</string>
+    <string name="fragmentHome" translatable="false">Converser</string>
+
+    <!-- nav menu-->
+    <string name="nav_open_drawer">open drawer</string>
+    <string name="nav_close_drawer">close drawer</string>
     <string name="converser_logo_banner">converser logo banner</string>
-    <string name="play_text_to_speech">play text to speech</string>
     <string name="menu_id_translator">Translator</string>
     <string name="menu_id_download_languages">Download Languages</string>
+
+    <!-- Translator / home fragment-->
+    <string name="default_quick_language_selection_button_text">English</string>
+    <string name="FAB_button_description">Record speech input</string>
+    <string name="translate_button_description">Translate</string>
+    <string name="enter_text">Enter text to translate</string>
+    <string name="target_spinner_description">target language selection</string>
+    <string name="source_language_spinner_description">source language selection</string>
+    <string name="swap_button_description">Swap languages</string>
+
+    <!-- download languages-->
+    <string name="fragment_download_languages">Download Languages</string>
+    <string name="downloading_language_model">Downloading language model</string>
+    <string name="download_button">download</string>
+
+    <!-- TTS-->
+    <string name="play_text_to_speech">play text to speech</string>
+
+
+    <!-- source language spinner-->
+    <string-array name="sourceLanguages">
+        <item>From</item>
+        <item>Afrikaans</item>
+        <item>Arabic</item>
+        <item>Belarusian</item>
+        <item>Bulgarian</item>
+        <item>Bengali</item>
+        <item>Catalan</item>
+        <item>Czech</item>
+        <item>Welsh</item>
+        <item>Danish</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>English</item>
+        <item>Esperanto</item>
+        <item>Spanish</item>
+        <item>Estonian</item>
+        <item>Persian</item>
+        <item>Finnish</item>
+        <item>French</item>
+        <item>Irish</item>
+        <item>Galician</item>
+        <item>Gujarati</item>
+        <item>Hebrew</item>
+        <item>Hindi</item>
+        <item>Croatian</item>
+        <item>Haitian</item>
+        <item>Hungarian</item>
+        <item>Indonesian</item>
+        <item>Icelandic</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Georgian</item>
+        <item>Kannada</item>
+        <item>Korean</item>
+        <item>Lithuanian</item>
+        <item>Latvian</item>
+        <item>Macedonian</item>
+        <item>Marathi</item>
+        <item>Malay</item>
+        <item>Maltese</item>
+        <item>Dutch</item>
+        <item>Norwegian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Slovak</item>
+        <item>Slovenian</item>
+        <item>Albanian</item>
+        <item>Swedish</item>
+        <item>Swahili</item>
+        <item>Tamil</item>
+        <item>Telugu</item>
+        <item>Thai</item>
+        <item>Tagalog</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Urdu</item>
+        <item>Vietnamese</item>
+        <item>Chinese</item>
+    </string-array>
+
+    <!-- target language spinner-->
+    <string-array name="targetLanguages">
+        <item>To</item>
+        <item>Afrikaans</item>
+        <item>Arabic</item>
+        <item>Belarusian</item>
+        <item>Bulgarian</item>
+        <item>Bengali</item>
+        <item>Catalan</item>
+        <item>Czech</item>
+        <item>Welsh</item>
+        <item>Danish</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>English</item>
+        <item>Esperanto</item>
+        <item>Spanish</item>
+        <item>Estonian</item>
+        <item>Persian</item>
+        <item>Finnish</item>
+        <item>French</item>
+        <item>Irish</item>
+        <item>Galician</item>
+        <item>Gujarati</item>
+        <item>Hebrew</item>
+        <item>Hindi</item>
+        <item>Croatian</item>
+        <item>Haitian</item>
+        <item>Hungarian</item>
+        <item>Indonesian</item>
+        <item>Icelandic</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Georgian</item>
+        <item>Kannada</item>
+        <item>Korean</item>
+        <item>Lithuanian</item>
+        <item>Latvian</item>
+        <item>Macedonian</item>
+        <item>Marathi</item>
+        <item>Malay</item>
+        <item>Maltese</item>
+        <item>Dutch</item>
+        <item>Norwegian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Slovak</item>
+        <item>Slovenian</item>
+        <item>Albanian</item>
+        <item>Swedish</item>
+        <item>Swahili</item>
+        <item>Tamil</item>
+        <item>Telugu</item>
+        <item>Thai</item>
+        <item>Tagalog</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Urdu</item>
+        <item>Vietnamese</item>
+        <item>Chinese</item>
+    </string-array>
+
+    <!-- all languages for downloadable list-->
+    <string-array name="allLanguages">
+        <item>Afrikaans</item>
+        <item>Arabic</item>
+        <item>Belarusian</item>
+        <item>Bulgarian</item>
+        <item>Bengali</item>
+        <item>Catalan</item>
+        <item>Czech</item>
+        <item>Welsh</item>
+        <item>Danish</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>English</item>
+        <item>Esperanto</item>
+        <item>Spanish</item>
+        <item>Estonian</item>
+        <item>Persian</item>
+        <item>Finnish</item>
+        <item>French</item>
+        <item>Irish</item>
+        <item>Galician</item>
+        <item>Gujarati</item>
+        <item>Hebrew</item>
+        <item>Hindi</item>
+        <item>Croatian</item>
+        <item>Haitian</item>
+        <item>Hungarian</item>
+        <item>Indonesian</item>
+        <item>Icelandic</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Georgian</item>
+        <item>Kannada</item>
+        <item>Korean</item>
+        <item>Lithuanian</item>
+        <item>Latvian</item>
+        <item>Macedonian</item>
+        <item>Marathi</item>
+        <item>Malay</item>
+        <item>Maltese</item>
+        <item>Dutch</item>
+        <item>Norwegian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Slovak</item>
+        <item>Slovenian</item>
+        <item>Albanian</item>
+        <item>Swedish</item>
+        <item>Swahili</item>
+        <item>Tamil</item>
+        <item>Telugu</item>
+        <item>Thai</item>
+        <item>Tagalog</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Urdu</item>
+        <item>Vietnamese</item>
+        <item>Chinese</item>
+    </string-array>
+
 </resources>

@@ -22,9 +22,10 @@ const val SECOND_LANGUAGE_IN_CONVERSATION = 2
  */
 class ConversationAdapter(
     val context: Context,
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var translationItemList: List<TranslationItem> = listOf()
+
     //click listeners to wire up the TTS buttons
     var langAclickListener: View.OnClickListener? = null
     var langBclickListener: View.OnClickListener? = null
@@ -37,12 +38,14 @@ class ConversationAdapter(
      *
      * @param itemView - the view for a language A translation item (first language)
      */
-    inner class LanguageAViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val originalTranslationItemA: TextView = itemView.findViewById(R.id.language_A_original_translation_item)
-        val translatedTranslationItemA: TextView = itemView.findViewById(R.id.language_A_translated_translation_item)
+    inner class LanguageAViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val originalTranslationItemA: TextView =
+            itemView.findViewById(R.id.language_A_original_translation_item)
+        val translatedTranslationItemA: TextView =
+            itemView.findViewById(R.id.language_A_translated_translation_item)
         val ttsButton: ImageButton = itemView.findViewById(R.id.text_to_speech_button)
 
-        init{
+        init {
             ttsButton.setOnClickListener(langAclickListener)
         }
     }
@@ -54,12 +57,14 @@ class ConversationAdapter(
      *
      * @param itemView - the view for a language B translation item (second language)
      */
-    inner class LanguageBViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val originalTranslationItemB: TextView = itemView.findViewById(R.id.language_B_original_translation_item)
-        val translatedTranslationItemB: TextView = itemView.findViewById(R.id.language_B_translated_translation_item)
+    inner class LanguageBViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val originalTranslationItemB: TextView =
+            itemView.findViewById(R.id.language_B_original_translation_item)
+        val translatedTranslationItemB: TextView =
+            itemView.findViewById(R.id.language_B_translated_translation_item)
         val ttsButton: ImageButton = itemView.findViewById(R.id.text_to_speech_button)
 
-        init{
+        init {
             ttsButton.setOnClickListener(langBclickListener)
         }
     }
@@ -74,9 +79,9 @@ class ConversationAdapter(
         //get the item from list of items
         val currentTranslationItem = translationItemList[position]
         //return the number corresponding whether the item is first or second in the conversation
-        return if (currentTranslationItem.language == PositionInConversation.FIRST){
+        return if (currentTranslationItem.language == PositionInConversation.FIRST) {
             FIRST_LANGUAGE_IN_CONVERSATION
-        } else{
+        } else {
             SECOND_LANGUAGE_IN_CONVERSATION
         }
     }
@@ -90,20 +95,22 @@ class ConversationAdapter(
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         //if language A message
-        return if (viewType == 1){
+        return if (viewType == 1) {
             //create layout for language A
             val view: View = LayoutInflater.from(context).inflate(
                 R.layout.translated_translation_item_first_language,
                 parent,
-                false)
+                false
+            )
             //return a view holder for language A
             LanguageAViewHolder(view)
-        } else{
+        } else {
             //create layout for language B
             val view: View = LayoutInflater.from(context).inflate(
                 R.layout.translated_translation_item_second_language,
                 parent,
-                false)
+                false
+            )
             //return a view holder for language B
             LanguageBViewHolder(view)
         }
@@ -120,18 +127,22 @@ class ConversationAdapter(
         val currentTranslationItem = translationItemList[position]
 
         //do stuff for language A view holder
-        if (holder.javaClass == LanguageAViewHolder::class.java){
+        if (holder.javaClass == LanguageAViewHolder::class.java) {
             val viewHolder = holder as LanguageAViewHolder
             //set the original and translated text
-            viewHolder.originalTranslationItemA.text = currentTranslationItem.originalTranslationItem
-            viewHolder.translatedTranslationItemA.text = currentTranslationItem.translatedTranslationItem
+            viewHolder.originalTranslationItemA.text =
+                currentTranslationItem.originalTranslationItem
+            viewHolder.translatedTranslationItemA.text =
+                currentTranslationItem.translatedTranslationItem
         }
         //do staff for language B view holder
-        else{
+        else {
             val viewHolder = holder as LanguageBViewHolder
             //set the original and translated text
-            viewHolder.originalTranslationItemB.text = currentTranslationItem.originalTranslationItem
-            viewHolder.translatedTranslationItemB.text = currentTranslationItem.translatedTranslationItem
+            viewHolder.originalTranslationItemB.text =
+                currentTranslationItem.originalTranslationItem
+            viewHolder.translatedTranslationItemB.text =
+                currentTranslationItem.translatedTranslationItem
         }
     }
 
@@ -141,7 +152,7 @@ class ConversationAdapter(
      * @return the number of translation items
      */
     override fun getItemCount(): Int {
-       return translationItemList.size
+        return translationItemList.size
     }
 
     /**
@@ -149,7 +160,7 @@ class ConversationAdapter(
      *
      * @param dataSet - the new list of translation items
      */
-    fun changeDataSet(dataSet: List<TranslationItem>){
+    fun changeDataSet(dataSet: List<TranslationItem>) {
         this.translationItemList = dataSet
         notifyDataSetChanged()
     }

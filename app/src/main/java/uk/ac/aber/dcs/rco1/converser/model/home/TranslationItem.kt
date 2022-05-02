@@ -5,8 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
- * TODO
- *
+ * A translation item within a conversation
+ * Entity annotation allows there to be a table for translation items in the db
+ * Primary key is the id which is automatically generated
  */
 @Entity(tableName = "translationItems")
 data class TranslationItem(
@@ -15,4 +16,5 @@ data class TranslationItem(
     var id: Int = 0,
     val originalTranslationItem: String?,
     val translatedTranslationItem: String?,
-    val language: PositionInConversation){}
+    val language: PositionInConversation
+) {}

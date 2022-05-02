@@ -26,11 +26,16 @@ class DownloadLanguageModelDialogFragment : DialogFragment() {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
             //use the custom layout as the view
-            builder.setView(inflater.inflate(R.layout.fragment_downloading_language_model_dialog, null))
+            builder.setView(
+                inflater.inflate(
+                    R.layout.fragment_downloading_language_model_dialog,
+                    null
+                )
+            )
             //stop user from being able to tap on the background and dismiss the dialog
             isCancelable = false
             builder.create()
-        } ?:throw IllegalStateException("Activity cannot be null")
+        } ?: throw IllegalStateException("Activity cannot be null")
     }
 
 }
