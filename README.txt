@@ -6,8 +6,8 @@ Author: Ruby Clarissa Osborne (rco1)
 ----------------------------------------
 CONTENTS
 ----------------------------------------
-I	    Introduction
-II	    Structure and Content
+I	   Introduction
+II	   Structure and Content
 II      Build Instructions
 III     Current Bugs
 
