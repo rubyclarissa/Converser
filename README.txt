@@ -8,8 +8,8 @@ CONTENTS
 ----------------------------------------
 I   Introduction
 II  Structure and Content
-II  Build Instructions
-III Current Bugs
+III Build Instructions
+VI Current Bugs
 
 ----------------------------------------
 I. INTRODUCTION
@@ -56,7 +56,7 @@ Res/navigation – contains an XML file that specifies a navigation graph for Ma
 Res/layout – contains the XML layout files for the UI
 
 ----------------------------------------
-II. BUILD INSTRUCTIONS
+III. BUILD INSTRUCTIONS
 ----------------------------------------
 Android Studio with emulator:
 - Create a virtual device using the virtual device manager
@@ -86,7 +86,7 @@ Alternatively install onto device from a browser on the device
 ** you must uninstall when finished as the app will take up significant space currently **
 
 ----------------------------------------
-II. CURRENT BUGS
+VI. CURRENT BUGS
 ----------------------------------------
 A number of bugs are present
 PLEASE SEE TECHNICAL REPORT
